@@ -56,14 +56,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         mapFragment.activity?.title = "Where's the nearest exit?"
 
-
-        val sharedPreference =  getSharedPreferences("RiversideExitSettings",MODE_PRIVATE)
-        var editor = sharedPreference.edit()
-        editor.putString("username","password")
-        editor.putLong("l",100L)
-        editor.apply()
-
-
     }
 
 
@@ -310,8 +302,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .setTransition(TRANSIT_FRAGMENT_OPEN)
                 .setReorderingAllowed(true)
                 .addToBackStack("DefaultView")
-                // .add(R.id.map, MySettingsFragment())
-                // .replace(R.id.map, MySettingsFragment(), "PreferenceFrag")
                 .add(R.id.map, ExampleFragment())
                 .commit()
 
