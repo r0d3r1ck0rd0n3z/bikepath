@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="aMapStyleOptions">
+        <item>@string/normal_map</item>
+        <item>@string/hybrid_map</item>
+        <item>@string/satellite_map</item>
+        <item>@string/minimal_map</item>
+    </string-array>
+
+    <string-array name="aMapStyleOptions_values">
+        <item>normal_map</item>
+        <item>hybrid_map</item>
+        <item>satellite_map</item>
+        <item>minimal_map</item>
+    </string-array>
+
+
+    <string-array name="aMarkerStyleOptions">
+        <item>@string/mType_circles</item>
+        <item>@string/mType_markers</item>
+        <item>@string/mType_numbers</item>
+    </string-array>
+
+    <string-array name="aMarkerStyleOptions_values">
+        <item>circles</item>
+        <item>markers</item>
+        <item>numbers</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Overflow menu when user clicks the bbq icon on the action bar -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/map_options_xml"
+    >
+
+    <item android:title="@string/MapTypes">
+        <menu>
+
+            <group android:id="@+id/gBasic_map_styles">
+
+            <item
+                android:id="@+id/normal_map"
+                android:title="@string/normal_map"
+                app:showAsAction="collapseActionView" />
+            <item
+                android:id="@+id/minimal_map"
+                android:title="@string/minimal_map"
+                app:showAsAction="never|collapseActionView"
+                />
+            </group>
+
+
+            <group android:id="@+id/gSatellite_map_styles" >
+            <item
+                android:id="@+id/satellite_map"
+                android:title="@string/satellite_map"
+                app:showAsAction="never|collapseActionView" />
+            <item
+                android:id="@+id/hybrid_map"
+                android:title="@string/hybrid_map"
+                app:showAsAction="never|collapseActionView" />
+            </group>
+
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/reset_dd_menu"
+        android:title="@string/reset_markers" />
+
+    <item
+        android:id="@+id/settings_dd_menu"
+        android:title="@string/settings" >
+    </item>
+
+    <item
+        android:id="@+id/about_dd_menu"
+        android:title="@string/about_the_app" />
+
+</menu>

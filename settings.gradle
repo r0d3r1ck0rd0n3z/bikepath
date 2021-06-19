@@ -1,0 +1,2 @@
+rootProject.name = "BikePathTaipei"
+include ':app'
