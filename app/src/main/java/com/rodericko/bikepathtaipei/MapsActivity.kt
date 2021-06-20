@@ -3,14 +3,12 @@ package com.rodericko.bikepathtaipei
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -40,8 +38,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private val mREQUESTLOCATIONPERMISSION  = 1
     private lateinit var binding: ActivityMapsBinding
-    private val mTAG = MapsActivity::class.java.simpleName
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +74,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     /**
- * ~~~~~~~ Do stuff on the map once available. ~~~~~~~
- */
+     * ~~~~~~~ Do stuff on the map once available. ~~~~~~~
+     */
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -195,6 +191,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         // Check if location permissions are granted and if so enable the
         // location data layer.
         if (requestCode == mREQUESTLOCATIONPERMISSION ) {
@@ -302,7 +299,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .setTransition(TRANSIT_FRAGMENT_OPEN)
                 .setReorderingAllowed(true)
                 .addToBackStack("DefaultView")
-                .add(R.id.map, ExampleFragment())
+                .add(R.id.map, PrefBackgroundFragment())
                 .commit()
 
 
@@ -373,31 +370,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    /**
-     * LOAD JSON STYLE FROM THE RAW FOLDER.
-     */
-
-
-    private fun setMapStyle(map: GoogleMap) {
-        try {
-            // Customize the styling of the base map using a JSON object defined
-            // in a raw resource file.
-            val success = map.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                    this,
-                    R.raw.map_style
-                )
-            )
-
-            if (!success) {
-                Log.e(mTAG, "Style parsing failed.")
-            }
-        } catch (e: Resources.NotFoundException) {
-            Log.e(mTAG, "Can't find style. Error: ", e)
-        }
-    }
-
-
 
     private fun createCircleMarks(mPoint01: Any, mPoint02: Any, str: Any) {
 
@@ -431,9 +403,9 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-class ExampleFragment : Fragment(R.layout.white_bg)
+class PrefBackgroundFragment : Fragment(R.layout.white_bg)
 
-class MySettingsFragment : PreferenceFragmentCompat() {
+class PrefSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 

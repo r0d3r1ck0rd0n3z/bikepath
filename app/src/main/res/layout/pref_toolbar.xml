@@ -4,7 +4,7 @@
     android:layout_width="1000dp"
     android:layout_height="500dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MySettingsFragment"
+    tools:context=".PrefSettingsFragment"
     android:background="@color/white"
     android:id="@+id/preference_bg">
 

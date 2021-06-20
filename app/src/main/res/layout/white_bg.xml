@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/purple_200"
     android:id="@+id/white_bg_id"
-    tools:context=".MySettingsFragment">
+    tools:context=".PrefSettingsFragment">
 
     <View
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:background="#FFFFFF" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:name="com.rodericko.bikepathtaipei.MySettingsFragment"
+        android:name="com.rodericko.bikepathtaipei.PrefSettingsFragment"
         android:id="@+id/fooFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
