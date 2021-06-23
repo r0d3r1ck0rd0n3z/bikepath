@@ -22,7 +22,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -294,7 +293,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .commit()
 
 
-
             supportFragmentManager.addOnBackStackChangedListener {
                 if (supportFragmentManager.backStackEntryCount == 0) {
                     setTitle(R.string.customize_appearance)
@@ -305,11 +303,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
             supportActionBar?.setCustomView (R.layout.pref_toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            val name = sharedPreferences.getString("username", "")
-            println("This is a value in settings: $name")
-
 
             true
         }
