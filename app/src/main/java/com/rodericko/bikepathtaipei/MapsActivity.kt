@@ -1,6 +1,7 @@
 package com.rodericko.bikepathtaipei
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Criteria
@@ -40,6 +41,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
             super.onCreate(savedInstanceState)
@@ -51,6 +53,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         mapFragment.activity?.title = "Where's the nearest exit?"
+
 
     }
 
@@ -77,6 +80,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * ~~~~~~~ Do stuff on the map once available. ~~~~~~~
      */
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         setMapLongClick(mMap)
@@ -103,7 +107,17 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+        val sharedPref = getPreferences(MODE_PRIVATE) ?: return
+        val dDefaultMapType = 0
 
+        when (sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)) {
+            0 -> mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+            1 -> mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
+            2 -> mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+            else -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+            }
+        }
 
 /**
  * ~~~~~~~ ADD CIRCLES ON THE MAP ~~~~~~~
@@ -209,6 +223,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Checks if users have given their location and sets location enabled if so.
+    @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         if (isPermissionGranted()) {
             mMap.isMyLocationEnabled = true
@@ -263,14 +278,35 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val style = MapStyleOptions.loadRawResourceStyle(this, R.raw.default_map_style)
             mMap.setMapStyle(style)
             mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+
+            val sharedPref = getPreferences(MODE_PRIVATE)
+            with (sharedPref.edit()) {
+                putInt(getString(R.string.MapTypes), 0)
+                apply()
+            }
+
             true
         }
         R.id.hybrid_map -> {
             mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
+
+            val sharedPref = getPreferences(MODE_PRIVATE)
+            with (sharedPref.edit()) {
+                putInt(getString(R.string.MapTypes), 1)
+                apply()
+            }
+
             true
         }
         R.id.satellite_map -> {
             mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+
+            val sharedPref = getPreferences(MODE_PRIVATE)
+            with (sharedPref.edit()) {
+                putInt(getString(R.string.MapTypes), 2)
+                apply()
+            }
+
             true
         }
         R.id.minimal_map -> {
@@ -403,7 +439,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-class PrefBackgroundFragment : Fragment(R.layout.white_bg)
+class PrefBackgroundFragment : Fragment(R.layout.white_bg) 
 
 class PrefSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
