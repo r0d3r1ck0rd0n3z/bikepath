@@ -7,7 +7,7 @@
     android:id="@+id/map_options_xml"
     >
 
-    <item android:title="@string/MapTypes">
+    <item android:title="@string/MapStyles">
         <menu>
 
             <group android:id="@+id/gBasic_map_styles">

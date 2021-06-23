@@ -19,7 +19,8 @@
     <string name="YouBike">YouBike</string>
     <string name="TestString">Item</string>
 
-    <string name="MapTypes">Map style</string>
+    <string name="MapTypes">Map type</string>
+    <string name="MapStyles">Map style</string>
     <string name="normal_map">Default map</string>
     <string name="minimal_map">Basic grey</string>
     <string name="hybrid_map">Satellite + labels</string>

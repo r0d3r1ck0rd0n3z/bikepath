@@ -62,15 +62,13 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (supportFragmentManager.popBackStackImmediate()) {
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
-            setTitle(R.string.exit_question)
             supportFragmentManager.popBackStack()
+            setTitle(R.string.exit_question)
 
             Toast.makeText(applicationContext,"Show me the UI!",Toast.LENGTH_LONG).show()
 
-
             return true
         }
-
         return super.onSupportNavigateUp()
     }
 
@@ -80,7 +78,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * ~~~~~~~ Do stuff on the map once available. ~~~~~~~
      */
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "InflateParams")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         setMapLongClick(mMap)
@@ -106,31 +104,22 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
        }
     }
 
+        // region ➕ ~~~~~~~ Apply preferences from previous session ~~~~~~~
 
         val sharedPref = getPreferences(MODE_PRIVATE) ?: return
         val dDefaultMapType = 0
+        val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
+        val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
+        changeMapStyle( dCurrentTypes, dCurrentStyle )
 
-        when (sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)) {
-            0 -> mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-            1 -> mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
-            2 -> mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
-            else -> {
-                mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-            }
-        }
+        // endregion
 
-/**
- * ~~~~~~~ ADD CIRCLES ON THE MAP ~~~~~~~
- */
+        /**
+         * ~~~~~~~ ADD CIRCLES ON THE MAP ~~~~~~~
+         */
 
-    for (i in 0..120) {
-        val mLat = mTwoDee[i][0]
-        val mLon = mTwoDee[i][1]
-        createCircleMarks(mLat, mLon, i)
-    }
-
-
-    mMap.setOnCircleClickListener {
+        addCirclesOnTheMap()
+        mMap.setOnCircleClickListener {
 
               val hTagged = it.tag as Int
               val hAddress = mTwoDee[hTagged][3] as String
@@ -153,8 +142,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                   startActivity(openURL)
 
               }
-
-    }
+            }
 
 
 
@@ -186,6 +174,9 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
+
+
+    // region ➕ ~~~~~~~ Permissions ~~~~~~~
     /**
     * ~~~~~~~ Create a brand new section just to handle permissions. ~~~~~~~
     */
@@ -240,7 +231,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
     * ~~~~~~~ end of permissions section ~~~~~~~
     */
-
+    // endregion permissions x
 
 
 
@@ -249,9 +240,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * INITIALIZE THE OPTIONS MENU.
      */
-
-    // Initializes contents of Activity's standard options menu. Only called the first time options
-    // menu is displayed.
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
@@ -270,61 +258,28 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * CONFIGURE BEHAVIOR OF ITEMS IN THE OPTIONS MENU.
      */
-
     // Called whenever an item in your options menu is selected.
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        // Change the map type based on the user's selection.
+
         R.id.normal_map -> {
-            val style = MapStyleOptions.loadRawResourceStyle(this, R.raw.default_map_style)
-            mMap.setMapStyle(style)
-            mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-
-            val sharedPref = getPreferences(MODE_PRIVATE)
-            with (sharedPref.edit()) {
-                putInt(getString(R.string.MapTypes), 0)
-                apply()
-            }
-
+            changeMapStyle(0, 0)
             true
         }
         R.id.hybrid_map -> {
-            mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
-
-            val sharedPref = getPreferences(MODE_PRIVATE)
-            with (sharedPref.edit()) {
-                putInt(getString(R.string.MapTypes), 1)
-                apply()
-            }
-
+            changeMapStyle(2)
             true
         }
         R.id.satellite_map -> {
-            mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
-
-            val sharedPref = getPreferences(MODE_PRIVATE)
-            with (sharedPref.edit()) {
-                putInt(getString(R.string.MapTypes), 2)
-                apply()
-            }
-
+            changeMapStyle(1)
             true
         }
         R.id.minimal_map -> {
-            val style = MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style)
-            mMap.setMapStyle(style)
-            mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+            changeMapStyle(0, 1)
             true
         }
         R.id.reset_dd_menu -> {
             mMap.clear()
-
-            for (i in 0..120) {
-                val mLat = mTwoDee[i][0]
-                val mLon = mTwoDee[i][1]
-                createCircleMarks(mLat, mLon, i)
-            }
-
-
+            addCirclesOnTheMap()
             true
         }
         R.id.settings_dd_menu -> {
@@ -371,7 +326,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // Called when user makes a long press gesture on the map.
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latLng ->
-            // A Snippet is Additional text that's displayed below the title.
+
             val snippet = String.format(
                 Locale.getDefault(),
                 "Lat: %1$.5f, Long: %2$.5f",
@@ -430,6 +385,41 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
 
+
+
+    private fun changeMapStyle(x: Int, y: Int = 0) {
+
+        val mMapStyleTypes = arrayOf(
+            GoogleMap.MAP_TYPE_NORMAL,
+            GoogleMap.MAP_TYPE_SATELLITE,
+            GoogleMap.MAP_TYPE_HYBRID
+            )
+
+        val mMapStyleStyles = arrayOf(
+            R.raw.default_map_style,
+            R.raw.map_style
+        )
+
+        val style = MapStyleOptions.loadRawResourceStyle(this, mMapStyleStyles[y])
+        mMap.setMapStyle(style)
+
+        mMap.mapType = mMapStyleTypes[x]
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putInt(getString(R.string.MapTypes), x)
+            putInt(getString(R.string.MapStyles), y)
+            apply()
+            }
+    }
+
+    private fun addCirclesOnTheMap() {
+
+        for (i in 0..120) {
+            val mLat = mTwoDee[i][0]
+            val mLon = mTwoDee[i][1]
+            createCircleMarks(mLat, mLon, i)
+            }
+    }
 
 
     /**
