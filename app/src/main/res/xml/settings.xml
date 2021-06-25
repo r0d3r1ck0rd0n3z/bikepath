@@ -76,6 +76,10 @@
                 android:data="https://www.google.com" />
         </Preference>
 
+        <Preference android:title="Clear all markers"
+            android:key="@string/reset_markers"
+             />
+
     </PreferenceCategory>
 
 

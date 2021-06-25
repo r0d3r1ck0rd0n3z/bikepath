@@ -64,7 +64,18 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             supportFragmentManager.popBackStack()
             setTitle(R.string.exit_question)
 
-            Toast.makeText(applicationContext,"Show me the UI!",Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext,"Changes saved!",Toast.LENGTH_LONG).show()
+            val sharedPref = getPreferences(MODE_PRIVATE)
+            val dDefaultMarkerState = 0
+            val dCurrentMarkerState = sharedPref.getInt(getString(R.string.reset_markers), dDefaultMarkerState)
+            if (dCurrentMarkerState == 1) {
+                mMap.clear()
+                addCirclesOnTheMap()
+            }
+            with (sharedPref.edit()) {
+                putInt(getString(R.string.reset_markers), dDefaultMarkerState)
+                apply()
+            }
 
             return true
         }
@@ -371,8 +382,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-
-
     override fun onBackPressed() {
         onSupportNavigateUp()
         }
@@ -415,6 +424,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+
     /**
      * ~~~~~~~ Last brace below ~~~~~~~
      */
@@ -443,12 +453,31 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
             val highScore = sharedPref.getString(getString(R.string.pNormal_map), defaultValue)
             println("The current value is $highScore")
 
+            true
+        }
+
+
+        val vResetMarkers: Preference? = findPreference(getString(R.string.reset_markers))
+        vResetMarkers?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+
+            Toast.makeText(context,"All markers removed from the map",Toast.LENGTH_LONG).show()
+
+            val defaultValue = 0
+            sharedPref.getInt(getString(R.string.reset_markers), defaultValue)
+
+            with (sharedPref.edit()) {
+                putInt(getString(R.string.reset_markers), 1)
+                apply()
+            }
 
 
             true
         }
 
+
     }
 }
+
+
 
 
