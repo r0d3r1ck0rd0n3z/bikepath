@@ -31,7 +31,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/customize_appearance"
+                android:text="@string/settings"
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
@@ -46,12 +46,7 @@
         android:layout_height="600dp"
         android:background="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/preference_bg"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/pNormal_map"
+        app:layout_constraintLeft_toRightOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

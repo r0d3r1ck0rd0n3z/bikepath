@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -53,7 +54,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         mapFragment.activity?.title = "Where's the nearest exit?"
 
-
     }
 
 
@@ -64,7 +64,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             supportFragmentManager.popBackStack()
             setTitle(R.string.exit_question)
 
-            Toast.makeText(applicationContext,"Changes saved!",Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext,"Changes saved",Toast.LENGTH_SHORT).show()
             val sharedPref = getPreferences(MODE_PRIVATE)
             val dDefaultMarkerState = 0
             val dCurrentMarkerState = sharedPref.getInt(getString(R.string.reset_markers), dDefaultMarkerState)
@@ -306,7 +306,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             supportFragmentManager.addOnBackStackChangedListener {
                 if (supportFragmentManager.backStackEntryCount == 0) {
-                    setTitle(R.string.customize_appearance)
+                    setTitle(R.string.settings)
                 }
             }
 
@@ -321,6 +321,9 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        onSupportNavigateUp()
+    }
 
 
     /**
@@ -382,25 +385,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    override fun onBackPressed() {
-        onSupportNavigateUp()
-        }
-
-
-
 
     private fun changeMapStyle(x: Int, y: Int = 0) {
-
-        val mMapStyleTypes = arrayOf(
-            GoogleMap.MAP_TYPE_NORMAL,
-            GoogleMap.MAP_TYPE_SATELLITE,
-            GoogleMap.MAP_TYPE_HYBRID
-            )
-
-        val mMapStyleStyles = arrayOf(
-            R.raw.default_map_style,
-            R.raw.map_style
-        )
 
         val style = MapStyleOptions.loadRawResourceStyle(this, mMapStyleStyles[y])
         mMap.setMapStyle(style)
@@ -438,21 +424,46 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
+        // Get current pref values
+
         val sharedPref = activity?.getPreferences(AppCompatActivity.MODE_PRIVATE) ?: return
-        val vNormalMap: Preference? = findPreference(getString(R.string.pNormal_map))
+        val dDefaultMapType = 0
 
+        val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
+        val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
 
-        vNormalMap?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        // Update map style pref to reflect current values
+
+        val mapStyleOption: ListPreference? = findPreference("mapStyleList")
+        mapStyleOption?.title = getString(mMapStyleSummary[dCurrentTypes])
+        mapStyleOption?.value = "$dCurrentTypes"
+        if (dCurrentStyle == 1 ) {
+            mapStyleOption?.title = getString(mMapStyleSummary[3])
+            mapStyleOption?.value = "3"
+        }
+
+        // Do stuff when user clicks on map style options
+
+        mapStyleOption?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             it.setIcon(R.drawable.icon_radio_grey)
+            val tempvalue = mapStyleOption?.value
+            Toast.makeText(context,"$tempvalue",Toast.LENGTH_LONG).show()
+            true
 
-            with (sharedPref.edit()) {
-                putString(getString(R.string.pNormal_map), "newHighScore")
-                apply()
-            }
-            val defaultValue = "resources"
-            val highScore = sharedPref.getString(getString(R.string.pNormal_map), defaultValue)
-            println("The current value is $highScore")
+        }
 
+
+        val dCurrentMarks = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
+        val markerTypeOption: ListPreference? = findPreference("markerTypeList")
+        markerTypeOption?.title = mMapMarkerTypes[dCurrentMarks]
+
+
+        val vMapStyles: Preference? = findPreference(getString(R.string.YouBike))
+        vMapStyles?.title = getString(R.string.YouBike_desc)
+        vMapStyles?.setIcon(R.drawable.icon_check)
+
+        vMapStyles?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            it.setIcon(R.drawable.icon_radio_grey)
             true
         }
 

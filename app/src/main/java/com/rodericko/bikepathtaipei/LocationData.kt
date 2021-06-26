@@ -1,5 +1,7 @@
 package com.rodericko.bikepathtaipei
 
+import com.google.android.gms.maps.GoogleMap
+
 val mTwoDee = arrayOf(
     arrayOf(25.1682863439158,121.44430057793987,"https://goo.gl/maps/tvahRdxf7VEmggLP6","淡水站"),
     arrayOf(25.12299,121.46196,"https://goo.gl/maps/sCsb1usDfNnAC9416","關渡水岸公園、中央北路四段601巷"),
@@ -123,3 +125,35 @@ val mTwoDee = arrayOf(
     arrayOf(25.0578292,121.5914847,"https://goo.gl/maps/NR4WZJ5GtiHBGU2P7","成功橋牽引道─向陽路、松河街口"),
     arrayOf(25.0593554,121.5910499,"https://goo.gl/maps/3GKGRJ4e798qw7Yi9","成功橋牽引道─成功路2段、潭美街口")
     )
+
+val mMapStyleTypes = arrayOf(
+    GoogleMap.MAP_TYPE_NORMAL,
+    GoogleMap.MAP_TYPE_SATELLITE,
+    GoogleMap.MAP_TYPE_HYBRID,
+    GoogleMap.MAP_TYPE_NORMAL
+)
+
+val mMapStyleStyles = arrayOf(
+    R.raw.default_map_style,
+    R.raw.map_style
+)
+
+val mMapStyleStrings = arrayOf(
+    R.string.normal_map,
+    R.string.satellite_map,
+    R.string.hybrid_map,
+    R.string.minimal_map
+)
+
+val mMapStyleSummary = arrayOf(
+    R.string.normal_map_desc,
+    R.string.satellite_map_desc,
+    R.string.hybrid_map_desc,
+    R.string.minimal_map_desc
+)
+
+val mMapMarkerTypes = arrayOf(
+    "circles",
+    "markers",
+    "numbers"
+)

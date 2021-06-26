@@ -6,79 +6,45 @@
 
     <PreferenceCategory
         app:key="pMapTypes"
-        app:title="@string/MapTypes">
+        app:title="@string/customize_appearance">
 
-        <Preference
-            app:key="@string/pNormal_map"
-            app:title="@string/normal_map"
-            app:summary="Standard Google Maps style (Default)"
-            app:icon="@drawable/icon_radio_green"
-            />
+        <ListPreference
+            app:key="mapStyleList"
+            app:title="@string/MapStyle"
+            app:useSimpleSummaryProvider="true"
+            app:entries="@array/aMapStyleOptions"
+            app:entryValues="@array/aMapStyleOptions_values"
+            app:dialogTitle="@string/select_an_option"
+            app:summary="%s"
+            android:summary="%s"/>
 
-        <Preference
-            app:key="pMinimalMap"
-            app:title="@string/minimal_map"
-            app:summary="Muted grey map with less distractions"
-            app:icon="@drawable/icon_radio_grey"
-            />
+        <ListPreference
+            app:key="markerTypeList"
+            app:title="@string/MarkerType"
+            app:useSimpleSummaryProvider="true"
+            app:entries="@array/aMarkerStyleOptions"
+            app:entryValues="@array/aMarkerStyleOptions_values"
+            app:dialogTitle="@string/select_an_option"/>
 
-        <Preference
-            app:key="pSatelliteMap"
-            app:title="@string/satellite_map"
-            app:summary="Show terrain only, no labels"
-            app:icon="@drawable/icon_radio_grey"
-            />
 
-        <Preference
-            app:key="pHybridMap"
-            app:title="@string/hybrid_map"
-            app:summary="Show terrain, with labels"
-            app:icon="@drawable/icon_radio_grey"
+        <Preference android:title="Clear all markers"
+            android:key="@string/reset_markers"
+            app:summary="@string/reset_markers_desc"
             />
 
     </PreferenceCategory>
 
-
-
-    <PreferenceCategory
-        app:key="pMarkerTypes"
-        app:title="@string/marker_types" >
-
-        <Preference
-            app:key="MarkerTypesCircles"
-            app:title="@string/mType_circles"
-            app:summary="Exits marked by circles on the ground (Default)"
-            app:icon="@drawable/icon_radio_green"
-            />
-
-        <Preference
-            app:key="MarkerTypesMarkers"
-            app:title="@string/mType_markers"
-            app:summary="Use standard Google Maps location icons"
-            app:icon="@drawable/icon_radio_grey"
-            />
-
-        <Preference
-            app:key="MarkerTypesNumbers"
-            app:title="@string/mType_numbers"
-            app:summary="Show numbered circles on the exits"
-            app:icon="@drawable/icon_radio_grey"
-            />
-
-    </PreferenceCategory>
 
     <PreferenceCategory
         app:key="pYouBikeLink"
         app:title="@string/YouBike" >
 
-        <Preference android:title="@string/YouBike" >
+        <Preference android:title="@string/YouBike"
+            app:summary="@string/YouBike_desc">
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://www.google.com" />
         </Preference>
 
-        <Preference android:title="Clear all markers"
-            android:key="@string/reset_markers"
-             />
 
     </PreferenceCategory>
 
