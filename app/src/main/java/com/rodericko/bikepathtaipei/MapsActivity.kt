@@ -64,7 +64,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             supportFragmentManager.popBackStack()
             setTitle(R.string.exit_question)
 
-            Toast.makeText(applicationContext,"Changes saved",Toast.LENGTH_SHORT).show()
+            // Handle Reset All Markers command from settings menu
+
             val sharedPref = getPreferences(MODE_PRIVATE)
             val dDefaultMarkerState = 0
             val dCurrentMarkerState = sharedPref.getInt(getString(R.string.reset_markers), dDefaultMarkerState)
@@ -76,6 +77,13 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 putInt(getString(R.string.reset_markers), dDefaultMarkerState)
                 apply()
             }
+
+            // Handle user customization of map styles from settings menu
+
+            val dDefaultMapType = 0
+            val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
+            val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
+            changeMapStyle( dCurrentTypes, dCurrentStyle )
 
             return true
         }
@@ -287,11 +295,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             changeMapStyle(0, 1)
             true
         }
-        R.id.reset_dd_menu -> {
-            mMap.clear()
-            addCirclesOnTheMap()
-            true
-        }
+
         R.id.settings_dd_menu -> {
 
 
@@ -428,11 +432,10 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
         val sharedPref = activity?.getPreferences(AppCompatActivity.MODE_PRIVATE) ?: return
         val dDefaultMapType = 0
-
         val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
         val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
 
-        // Update map style pref to reflect current values
+        // Update map style pref to show current map style values
 
         val mapStyleOption: ListPreference? = findPreference("mapStyleList")
         mapStyleOption?.title = getString(mMapStyleSummary[dCurrentTypes])
@@ -440,18 +443,27 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
         if (dCurrentStyle == 1 ) {
             mapStyleOption?.title = getString(mMapStyleSummary[3])
             mapStyleOption?.value = "3"
-        }
+            }
 
         // Do stuff when user clicks on map style options
 
-        mapStyleOption?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            it.setIcon(R.drawable.icon_radio_grey)
-            val tempvalue = mapStyleOption?.value
-            Toast.makeText(context,"$tempvalue",Toast.LENGTH_LONG).show()
-            true
+        mapStyleOption?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                val x: Int = newValue.toString().toInt()
 
-        }
+                mapStyleOption?.title = getString(mMapStyleSummary[x])
+                with (sharedPref.edit()) {
+                    putInt(getString(R.string.MapTypes), x)
+                    if (x == 3) { putInt(getString(R.string.MapStyles), 1) }
+                    else        { putInt(getString(R.string.MapStyles), 0) }
+                    apply()
+                    }
 
+                true
+            }
+
+
+        // Update marker pref to show currently selected marker types
 
         val dCurrentMarks = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
         val markerTypeOption: ListPreference? = findPreference("markerTypeList")
@@ -468,6 +480,8 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
         }
 
 
+        // Do stuff when user clicks the Reset All Markers button
+
         val vResetMarkers: Preference? = findPreference(getString(R.string.reset_markers))
         vResetMarkers?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
@@ -480,7 +494,6 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
                 putInt(getString(R.string.reset_markers), 1)
                 apply()
             }
-
 
             true
         }

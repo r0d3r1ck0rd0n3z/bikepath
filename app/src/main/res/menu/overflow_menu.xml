@@ -39,10 +39,6 @@
     </item>
 
     <item
-        android:id="@+id/reset_dd_menu"
-        android:title="@string/reset_markers" />
-
-    <item
         android:id="@+id/settings_dd_menu"
         android:title="@string/settings" >
     </item>

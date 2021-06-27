@@ -36,8 +36,10 @@
     <string name="reset_markers">Reset markers</string>
     <string name="about_the_app">About</string>
     <string name="general_settings">General</string>
+    <string name="feedback_link">Send me feedback!</string>
     <string name="select_an_option">Select an option</string>
     <string name="customize_appearance">Customize appearance</string>
+    <string name="external_links">Online resources</string>
 
     <string name="pNormal_map">NormalMap</string>
     <string name="pMinimal_map">BasicGrey</string>
@@ -49,11 +51,15 @@
     <string name="MapType">Map type</string>
     <string name="MapStyle">Map style</string>
     <string name="MarkerType">Marker type</string>
+    <string name="CustomMarkers">Custom markers</string>
 
     <string name="normal_map_desc">Standard Google Maps style (Default)</string>
     <string name="satellite_map_desc">Show terrain only, no labels</string>
     <string name="hybrid_map_desc">Show terrain, with labels</string>
     <string name="minimal_map_desc">Muted grey map with less distractions</string>
-    <string name="reset_markers_desc">Remove all custom markers added by user</string>
-    <string name="YouBike_desc">Launch the YouBike website via external browser</string>
+    <string name="reset_markers_desc">Remove all custom markers added by user </string>
+    <string name="custom_markers_desc"><i>To add a custom marker, <br/>tap and hold on an empty area of the map.</i></string>
+    <string name="YouBike_desc">Need to find the nearest YouBike station? Click here to visit the YouBike website.</string>
+    <string name="feedback_link_desc">Feedback, comments or suggestions for improvement? Fill up this form to send me feedback.</string>
+    <string name="external_links_desc"><i>Websites that provide more information. <br/>Opens in a separate browser window.</i></string>
 </resources>

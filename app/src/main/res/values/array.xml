@@ -3,16 +3,16 @@
 
     <string-array name="aMapStyleOptions">
         <item>@string/normal_map</item>
+        <item>@string/minimal_map</item>
         <item>@string/satellite_map</item>
         <item>@string/hybrid_map</item>
-        <item>@string/minimal_map</item>
     </string-array>
 
     <string-array name="aMapStyleOptions_values">
         <item>0</item> <!-- normal_map -->
+        <item>3</item> <!-- minimal_map -->
         <item>1</item> <!-- hybrid_map -->
         <item>2</item> <!-- satellite_map -->
-        <item>3</item> <!-- minimal_map -->
     </string-array>
 
 

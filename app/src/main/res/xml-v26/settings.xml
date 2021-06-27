@@ -30,40 +30,43 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:singleLineTitle="false"
         app:key="pClearAllMarkers"
-        app:title="@string/CustomMarkers"
+        app:singleLineTitle="false"
         app:summary="@string/custom_markers_desc"
-        app:singleLineTitle="false">
+        app:title="@string/CustomMarkers">
 
         <Preference
-            android:title="Clear all markers"
             android:key="@string/reset_markers"
-            app:summary="@string/reset_markers_desc"
-            />
+            android:title="Clear all markers"
+            app:summary="@string/reset_markers_desc" />
 
     </PreferenceCategory>
 
 
     <PreferenceCategory
-        app:key="pExternalLinks"
-        app:title="@string/external_links"
-        app:summary="@string/external_links_desc"
         android:layout_width="wrap_content"
+        android:singleLineTitle="false"
+        app:key="pExternalLinks"
         app:singleLineTitle="false"
-        android:singleLineTitle="false">
+        app:summary="@string/external_links_desc"
+        app:title="@string/external_links">
 
         <Preference
             android:title="@string/YouBike"
             app:key="pYouBikeLink"
             app:summary="@string/YouBike_desc">
-            <intent android:action="android.intent.action.VIEW"
+            <intent
+                android:action="android.intent.action.VIEW"
                 android:data="https://taipei.youbike.com.tw/station/map?_id=5cc29585083e7b5c1b035552" />
         </Preference>
 
         <Preference
             android:title="@string/feedback_link"
             app:summary="@string/feedback_link_desc">
-            <intent android:action="android.intent.action.VIEW"
+            <intent
+                android:action="android.intent.action.VIEW"
                 android:data="https://forms.gle/9Nf3FLB8JRVuxJjp9" />
         </Preference>
 
