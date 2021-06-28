@@ -32,13 +32,19 @@
     <PreferenceCategory
         app:key="pClearAllMarkers"
         app:title="@string/CustomMarkers"
-        app:summary="@string/custom_markers_desc"
-        app:singleLineTitle="false">
+        >
 
         <Preference
-            android:title="Clear all markers"
+            android:title="@string/reset_markers"
             android:key="@string/reset_markers"
             app:summary="@string/reset_markers_desc"
+            />
+
+        <Preference
+            android:title="@string/notes_settings"
+            android:key="pNotesMarker"
+            app:summary="@string/custom_markers_desc"
+            app:selectable="false"
             />
 
     </PreferenceCategory>
@@ -47,10 +53,7 @@
     <PreferenceCategory
         app:key="pExternalLinks"
         app:title="@string/external_links"
-        app:summary="@string/external_links_desc"
-        android:layout_width="wrap_content"
-        app:singleLineTitle="false"
-        android:singleLineTitle="false">
+        >
 
         <Preference
             android:title="@string/YouBike"
@@ -66,6 +69,13 @@
             <intent android:action="android.intent.action.VIEW"
                 android:data="https://forms.gle/9Nf3FLB8JRVuxJjp9" />
         </Preference>
+
+        <Preference
+            android:title="@string/notes_settings"
+            android:key="pNotesLinks"
+            app:summary="@string/external_links_desc"
+            app:selectable="false"
+            />
 
     </PreferenceCategory>
 

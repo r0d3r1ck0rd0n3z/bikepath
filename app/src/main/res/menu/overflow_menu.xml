@@ -38,6 +38,32 @@
         </menu>
     </item>
 
+
+    <item android:title="@string/MarkerType">
+        <menu>
+
+            <group android:id="@+id/gBasic_marker_styles">
+
+                <item
+                    android:id="@+id/marker_circles"
+                    android:title="@string/mType_circles"
+                    app:showAsAction="collapseActionView"
+                    />
+                <item
+                    android:id="@+id/marker_markers"
+                    android:title="@string/mType_markers"
+                    app:showAsAction="never|collapseActionView"
+                    />
+                <item
+                    android:id="@+id/marker_numbers"
+                    android:title="@string/mType_numbers"
+                    app:showAsAction="never|collapseActionView"
+                    />
+            </group>
+
+        </menu>
+    </item>
+
     <item
         android:id="@+id/settings_dd_menu"
         android:title="@string/settings" >

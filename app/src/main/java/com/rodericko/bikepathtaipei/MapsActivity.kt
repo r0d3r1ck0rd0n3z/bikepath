@@ -54,6 +54,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         mapFragment.activity?.title = "Where's the nearest exit?"
 
+
     }
 
 
@@ -83,7 +84,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val dDefaultMapType = 0
             val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
             val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
-            changeMapStyle( dCurrentTypes, dCurrentStyle )
+            val dCurrentMarks = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
+            changeMapStyle( dCurrentTypes, dCurrentStyle, dCurrentMarks )
 
             return true
         }
@@ -102,66 +104,46 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setMapLongClick(mMap)
         setPoiClick(mMap)
 
-    val mGOLatLng = LatLng(25.12299, 121.46196)
-    val mGOMapOpt = GroundOverlayOptions()
-        .image(BitmapDescriptorFactory.fromResource(R.drawable.sampleimage))
-        .position(mGOLatLng, 50f)
-        .clickable(true)
+
+        val mGOLatLng = LatLng(25.12299, 121.46196)
+        val mGOMapOpt = GroundOverlayOptions()
+            .image(BitmapDescriptorFactory.fromResource(R.drawable.sampleimage))
+            .position(mGOLatLng, 50f)
+            .clickable(true)
 
 
-    mMap.addGroundOverlay(mGOMapOpt)?.tag = "haha"
-    mMap.setOnGroundOverlayClickListener {
+        mMap.addGroundOverlay(mGOMapOpt)?.tag = "haha"
+        mMap.setOnGroundOverlayClickListener {
 
-       if (it.tag == "haha") {
+           if (it.tag == "haha") {
 
-           Toast.makeText(
-               applicationContext,
-               "This is a haha message",
-               Toast.LENGTH_SHORT
-           ).show()
-       }
-    }
+               Toast.makeText(
+                   applicationContext,
+                   "This is a haha message",
+                   Toast.LENGTH_SHORT
+               ).show()
+           }
+        }
+
 
         // region ➕ ~~~~~~~ Apply preferences from previous session ~~~~~~~
 
-        val sharedPref = getPreferences(MODE_PRIVATE) ?: return
+        val sharedPref = getPreferences(MODE_PRIVATE)
         val dDefaultMapType = 0
-        val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
-        val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
-        changeMapStyle( dCurrentTypes, dCurrentStyle )
+        val x = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
+        val y = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
+        val z = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
+        changeMapStyle( x, y, z )
+        when (z) {
+            0 -> addCirclesOnTheMap()
+            1 -> addMarkersOnTheMap()
+            else -> {
+                oToast(getString(R.string.not_implemented_yet))
+                addCirclesOnTheMap()
+            }
+        }
 
         // endregion
-
-        /**
-         * ~~~~~~~ ADD CIRCLES ON THE MAP ~~~~~~~
-         */
-
-        addCirclesOnTheMap()
-        mMap.setOnCircleClickListener {
-
-              val hTagged = it.tag as Int
-              val hAddress = mTwoDee[hTagged][3] as String
-              val hBottom = layoutInflater.inflate(R.layout.exit_info, null)
-              hBottom.kAddress_Line.text = hAddress
-              val dialog = BottomSheetDialog(this)
-              dialog.setContentView(hBottom)
-
-              hBottom.setOnClickListener {
-                  dialog.dismiss()
-              }
-
-              dialog.show()
-
-              hBottom.kStreetViewLink.setOnClickListener {
-
-                  val hStreetURL = mTwoDee[hTagged][2] as String
-                  val openURL = Intent(Intent.ACTION_VIEW)
-                  openURL.data = Uri.parse(hStreetURL)
-                  startActivity(openURL)
-
-              }
-            }
-
 
 
         /**
@@ -295,7 +277,18 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             changeMapStyle(0, 1)
             true
         }
-
+        R.id.marker_circles -> {
+            addCirclesOnTheMap()
+            true
+        }
+        R.id.marker_markers -> {
+            addMarkersOnTheMap()
+            true
+        }
+        R.id.marker_numbers -> {
+            oToast(getString(R.string.not_implemented_yet))
+            true
+        }
         R.id.settings_dd_menu -> {
 
 
@@ -313,7 +306,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     setTitle(R.string.settings)
                 }
             }
-
 
             supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
             supportActionBar?.setCustomView (R.layout.pref_toolbar)
@@ -373,7 +365,37 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-    private fun createCircleMarks(mPoint01: Any, mPoint02: Any, str: Any) {
+    private fun changeMapStyle(x: Int = 0, y: Int = 0, z: Int = 0) {
+
+        // Save new settings in our preferences file
+
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putInt(getString(R.string.MapTypes), x)
+            putInt(getString(R.string.MapStyles), y)
+            putInt(getString(R.string.MarkerType), z)
+            apply()
+        }
+
+        // Apply new map style (x and y)
+
+        val style = MapStyleOptions.loadRawResourceStyle(this, mMapStyleStyles[y])
+        mMap.setMapStyle(style)
+        mMap.mapType = mMapStyleTypes[x]
+
+        // Apply new marker styles (z)
+
+        when (z) {
+            0 -> addCirclesOnTheMap()
+            1 -> addMarkersOnTheMap()
+            else -> {
+                oToast(getString(R.string.not_implemented_yet))
+            }
+        }
+    }
+
+
+    private fun createCircleMarks(mPoint01: Any, mPoint02: Any, str: Any, m: Int = 0) {
 
         val mLat =  mPoint01 as Double
         val mLang = mPoint02 as Double
@@ -384,49 +406,126 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val circles = CircleOptions()
             .radius(10.0)
             .clickable(true)
+
+        if ( m == 1 ) {
+            circles
+                .strokeColor(0x00000000)
+                .zIndex(5F)
+           }
+
          val mPlacedCircle = mMap.addCircle(circles.center(mConvPoint))
          mPlacedCircle.tag = mTagged
 
     }
 
 
-    private fun changeMapStyle(x: Int, y: Int = 0) {
-
-        val style = MapStyleOptions.loadRawResourceStyle(this, mMapStyleStyles[y])
-        mMap.setMapStyle(style)
-
-        mMap.mapType = mMapStyleTypes[x]
-        val sharedPref = getPreferences(MODE_PRIVATE)
-        with (sharedPref.edit()) {
-            putInt(getString(R.string.MapTypes), x)
-            putInt(getString(R.string.MapStyles), y)
-            apply()
-            }
-    }
 
     private fun addCirclesOnTheMap() {
+
+        mMap.clear()
 
         for (i in 0..120) {
             val mLat = mTwoDee[i][0]
             val mLon = mTwoDee[i][1]
-            createCircleMarks(mLat, mLon, i)
+            createCircleMarks(mLat, mLon, i, 0)
             }
+
+        mMap.setOnCircleClickListener {
+            val hTagged = it.tag as Int
+            showBottomDrawer(hTagged)
+        }
+
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putInt(getString(R.string.MarkerType), 0)
+            apply()
+        }
+
+    }
+
+    @SuppressLint("PotentialBehaviorOverride")
+    private fun addMarkersOnTheMap() {
+
+        mMap.clear()
+
+        for (i in 0..120) {
+            val mLat  = mTwoDee[i][0]
+            val mLang = mTwoDee[i][1]
+
+            createCircleMarks(mLat, mLang, i, 1)
+
+            mLat as Double
+            mLang as Double
+            val mConvPoint = LatLng(mLat, mLang)
+
+            val mPlacedMarker = mMap.addMarker(
+                MarkerOptions()
+                    .position(mConvPoint)
+                    .zIndex(0F)
+            )
+            mPlacedMarker?.tag = i
+        }
+
+        mMap.setOnMarkerClickListener {
+            val hTagged = it.tag as Int
+            showBottomDrawer(hTagged)
+            true
+        }
+
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putInt(getString(R.string.MarkerType), 1)
+            apply()
+        }
+
+    }
+
+    @SuppressLint("InflateParams")
+    private fun showBottomDrawer(hTagged: Int) {
+
+        val hAddress = mTwoDee[hTagged][3] as String
+        val hBottom = layoutInflater.inflate(R.layout.exit_info, null)
+        hBottom.kAddress_Line.text = hAddress
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(hBottom)
+
+        hBottom.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+
+        hBottom.kStreetViewLink.setOnClickListener {
+
+            val hStreetURL = mTwoDee[hTagged][2] as String
+            val openURL = Intent(Intent.ACTION_VIEW)
+            openURL.data = Uri.parse(hStreetURL)
+            startActivity(openURL)
+
+        }
+
     }
 
 
+    private fun oToast(text: String) {
+        Toast.makeText(applicationContext,text,Toast.LENGTH_LONG).show()
+    }
 
     /**
      * ~~~~~~~ Last brace below ~~~~~~~
      */
+
 }
 
-
-
-class PrefBackgroundFragment : Fragment(R.layout.white_bg) 
+class PrefBackgroundFragment : Fragment(R.layout.white_bg)
 
 class PrefSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
+
+        // fun oToast(text: String) {
+        //     Toast.makeText(context,text,Toast.LENGTH_LONG).show()
+        // }
 
         // Get current pref values
 
@@ -445,7 +544,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
             mapStyleOption?.value = "3"
             }
 
-        // Do stuff when user clicks on map style options
+        // Do stuff when user clicks on option for map styles
 
         mapStyleOption?.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue ->
@@ -467,36 +566,52 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
         val dCurrentMarks = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
         val markerTypeOption: ListPreference? = findPreference("markerTypeList")
-        markerTypeOption?.title = mMapMarkerTypes[dCurrentMarks]
+        markerTypeOption?.title = getString(mMapMarkerTypes[dCurrentMarks])
+        markerTypeOption?.value = "$dCurrentMarks"
+
+        // Do stuff when user clicks on option for marker types
+
+        markerTypeOption?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                val x: Int = newValue.toString().toInt()
+
+                markerTypeOption?.title = getString(mMapMarkerTypes[x])
+                with (sharedPref.edit()) {
+                    putInt(getString(R.string.MarkerType), x)
+                    apply()
+                }
+
+                true
+            }
 
 
         val vMapStyles: Preference? = findPreference(getString(R.string.YouBike))
-        vMapStyles?.title = getString(R.string.YouBike_desc)
-        vMapStyles?.setIcon(R.drawable.icon_check)
+        vMapStyles?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
 
-        vMapStyles?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            it.setIcon(R.drawable.icon_radio_grey)
-            true
+                it.setIcon(R.drawable.icon_radio_grey)
+                true
         }
 
 
         // Do stuff when user clicks the Reset All Markers button
 
         val vResetMarkers: Preference? = findPreference(getString(R.string.reset_markers))
-        vResetMarkers?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        vResetMarkers?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
 
-            Toast.makeText(context,"All markers removed from the map",Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"All markers removed from the map",Toast.LENGTH_LONG).show()
 
-            val defaultValue = 0
-            sharedPref.getInt(getString(R.string.reset_markers), defaultValue)
+                val defaultValue = 0
+                sharedPref.getInt(getString(R.string.reset_markers), defaultValue)
+                with (sharedPref.edit()) {
+                    putInt(getString(R.string.reset_markers), 1)
+                    apply()
+                }
 
-            with (sharedPref.edit()) {
-                putInt(getString(R.string.reset_markers), 1)
-                apply()
-            }
-
-            true
+                true
         }
+
 
 
     }

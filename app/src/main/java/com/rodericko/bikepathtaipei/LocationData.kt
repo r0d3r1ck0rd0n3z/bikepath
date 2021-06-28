@@ -133,11 +133,6 @@ val mMapStyleTypes = arrayOf(
     GoogleMap.MAP_TYPE_NORMAL
 )
 
-val mMapStyleStyles = arrayOf(
-    R.raw.default_map_style,
-    R.raw.map_style
-)
-
 val mMapStyleStrings = arrayOf(
     R.string.normal_map,
     R.string.satellite_map,
@@ -153,7 +148,12 @@ val mMapStyleSummary = arrayOf(
 )
 
 val mMapMarkerTypes = arrayOf(
-    "circles",
-    "markers",
-    "numbers"
+    R.string.mType_circles_desc,
+    R.string.mType_markers_desc,
+    R.string.mType_numbers_desc
+)
+
+val mMapStyleStyles = arrayOf(
+    R.raw.default_map_style,
+    R.raw.map_style
 )
