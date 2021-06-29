@@ -29,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.maps.android.ui.IconGenerator
 import com.rodericko.bikepathtaipei.databinding.ActivityMapsBinding
 import kotlinx.android.synthetic.main.exit_info.view.*
 import java.util.*
@@ -72,20 +73,16 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val dCurrentMarkerState = sharedPref.getInt(getString(R.string.reset_markers), dDefaultMarkerState)
             if (dCurrentMarkerState == 1) {
                 mMap.clear()
-                addCirclesOnTheMap()
-            }
+                applyUserSettings()
+                }
             with (sharedPref.edit()) {
                 putInt(getString(R.string.reset_markers), dDefaultMarkerState)
                 apply()
-            }
+                }
 
             // Handle user customization of map styles from settings menu
 
-            val dDefaultMapType = 0
-            val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
-            val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
-            val dCurrentMarks = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
-            changeMapStyle( dCurrentTypes, dCurrentStyle, dCurrentMarks )
+            applyUserSettings()
 
             return true
         }
@@ -116,32 +113,14 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnGroundOverlayClickListener {
 
            if (it.tag == "haha") {
-
-               Toast.makeText(
-                   applicationContext,
-                   "This is a haha message",
-                   Toast.LENGTH_SHORT
-               ).show()
+              oToast("This is a haha message")
            }
         }
 
 
         // region ➕ ~~~~~~~ Apply preferences from previous session ~~~~~~~
 
-        val sharedPref = getPreferences(MODE_PRIVATE)
-        val dDefaultMapType = 0
-        val x = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
-        val y = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
-        val z = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
-        changeMapStyle( x, y, z )
-        when (z) {
-            0 -> addCirclesOnTheMap()
-            1 -> addMarkersOnTheMap()
-            else -> {
-                oToast(getString(R.string.not_implemented_yet))
-                addCirclesOnTheMap()
-            }
-        }
+        applyUserSettings()
 
         // endregion
 
@@ -286,7 +265,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
         R.id.marker_numbers -> {
-            oToast(getString(R.string.not_implemented_yet))
+            addNumbersOnTheMap()
             true
         }
         R.id.settings_dd_menu -> {
@@ -373,7 +352,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         with (sharedPref.edit()) {
             putInt(getString(R.string.MapTypes), x)
             putInt(getString(R.string.MapStyles), y)
-            putInt(getString(R.string.MarkerType), z)
             apply()
         }
 
@@ -385,9 +363,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Apply new marker styles (z)
 
-        when (z) {
+        when (sharedPref.getInt(getString(R.string.MarkerType), z)) {
             0 -> addCirclesOnTheMap()
             1 -> addMarkersOnTheMap()
+            2 -> addNumbersOnTheMap()
             else -> {
                 oToast(getString(R.string.not_implemented_yet))
             }
@@ -480,6 +459,49 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    @SuppressLint("PotentialBehaviorOverride")
+    private fun addNumbersOnTheMap() {
+
+        mMap.clear()
+
+        for (i in 0..120) {
+            val mLat  = mTwoDee[i][0]
+            val mLang = mTwoDee[i][1]
+
+            createCircleMarks(mLat, mLang, i, 1)
+
+            mLat as Double
+            mLang as Double
+            val mConvPoint = LatLng(mLat, mLang)
+
+            val numeral = IconGenerator(applicationContext)
+            numeral.setColor(0xfff00000.toInt())
+            numeral.setTextAppearance(R.style.numeralStyle)
+
+            val mPlacedNumber = mMap.addMarker(
+                MarkerOptions()
+                    .position(mConvPoint)
+                    .zIndex(0F)
+                    .icon(BitmapDescriptorFactory.fromBitmap(numeral.makeIcon("$i")))
+            )
+            mPlacedNumber?.tag = i
+
+        }
+
+        mMap.setOnMarkerClickListener {
+            val hTagged = it.tag as Int
+            showBottomDrawer(hTagged)
+            true
+        }
+
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putInt(getString(R.string.MarkerType), 2)
+            apply()
+        }
+
+    }
+
     @SuppressLint("InflateParams")
     private fun showBottomDrawer(hTagged: Int) {
 
@@ -506,6 +528,26 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    private fun applyUserSettings() {
+
+        val sharedPref = getPreferences(MODE_PRIVATE)
+        val dDefaultMapType = 0
+        val x = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
+        val y = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
+        val z = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
+        changeMapStyle( x, y, z )
+        when (z) {
+            0 -> addCirclesOnTheMap()
+            1 -> addMarkersOnTheMap()
+            2 -> addNumbersOnTheMap()
+            else -> {
+                oToast(getString(R.string.not_implemented_yet))
+                addCirclesOnTheMap()
+            }
+        }
+
+    }
+
 
     private fun oToast(text: String) {
         Toast.makeText(applicationContext,text,Toast.LENGTH_LONG).show()
@@ -526,6 +568,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
         // fun oToast(text: String) {
         //     Toast.makeText(context,text,Toast.LENGTH_LONG).show()
         // }
+
 
         // Get current pref values
 
@@ -616,7 +659,3 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
     }
 }
-
-
-
-

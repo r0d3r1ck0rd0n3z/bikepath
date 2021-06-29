@@ -14,4 +14,9 @@
         <!-- Customize your theme here. -->
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <style name="numeralStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
