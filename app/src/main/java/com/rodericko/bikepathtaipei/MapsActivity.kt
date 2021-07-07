@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
@@ -12,6 +13,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -23,12 +26,15 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.ui.IconGenerator
 import com.rodericko.bikepathtaipei.databinding.ActivityMapsBinding
 import kotlinx.android.synthetic.main.exit_info.view.*
@@ -55,6 +61,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         mapFragment.activity?.title = "Where's the nearest exit?"
 
+        checkPlayServices()
 
     }
 
@@ -83,7 +90,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // Handle user customization of map styles from settings menu
 
             applyUserSettings()
-
             return true
         }
         return super.onSupportNavigateUp()
@@ -100,7 +106,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         setMapLongClick(mMap)
         setPoiClick(mMap)
-
+        applyUserSettings()
 
         val mGOLatLng = LatLng(25.12299, 121.46196)
         val mGOMapOpt = GroundOverlayOptions()
@@ -116,13 +122,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
               oToast("This is a haha message")
            }
         }
-
-
-        // region ➕ ~~~~~~~ Apply preferences from previous session ~~~~~~~
-
-        applyUserSettings()
-
-        // endregion
 
 
         /**
@@ -213,6 +212,45 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // endregion permissions x
 
 
+    private fun checkPlayServices(): Boolean {
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(this)
+        val currentView: View = this.findViewById(android.R.id.content)
+
+        class CustomSnackBarAction : View.OnClickListener {
+
+            override fun onClick(v: View) {
+                oToast("This device is not supported.")
+            }
+        }
+
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                val snackBar = Snackbar.make(
+                    currentView,
+                    "This is Simple Snack bar. This is Simple Snack bar. This is Simple Snack bar. This is Simple Snack bar.",
+                    Snackbar.LENGTH_INDEFINITE
+                )
+                snackBar.setAction("OK", CustomSnackBarAction())
+                snackBar.setActionTextColor(Color.WHITE)
+                snackBar.setTextColor(Color.YELLOW)
+                snackBar.setMaxInlineActionWidth(500)
+                val snackBarView = snackBar.view
+                snackBarView.setBackgroundColor(Color.DKGRAY)
+                val textView =
+                    snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+                textView.setTextColor(Color.YELLOW)
+                textView.textSize = 28f
+                textView.maxLines = 5
+                snackBar.show()
+            } else {
+                oToast("This device is not supported.")
+                finish()
+            }
+            return false
+        }
+        return true
+    }
 
 
 
@@ -305,7 +343,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * CONFIGURE LONG PRESS.
      */
 
-    // Called when user makes a long press gesture on the map.
+    // Called when user makes a long press gesture on the map
+
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latLng ->
 
@@ -330,7 +369,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * ADD MARKER ON MAP WHEN USER CLICKS.
      */
 
-    // Places a marker on the map and displays an info window that contains POI name.
+    // Places a marker on the map and displays an info window that contains POI name
+
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
             val poiMarker = map.addMarker(
