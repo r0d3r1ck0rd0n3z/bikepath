@@ -228,7 +228,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (apiAvailability.isUserResolvableError(resultCode)) {
                 val snackBar = Snackbar.make(
                     currentView,
-                    "This is Simple Snack bar. This is Simple Snack bar. This is Simple Snack bar. This is Simple Snack bar.",
+                    "I'm working on a version that doesn't require Google Play Services. Thank you for your patience.",
                     Snackbar.LENGTH_INDEFINITE
                 )
                 snackBar.setAction("OK", CustomSnackBarAction())
