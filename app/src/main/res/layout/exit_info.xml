@@ -3,13 +3,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:background="@color/purple_500"
+        android:background="@color/topbar"
         app:layout_constraintTop_toTopOf="parent">
     </View>
 
@@ -18,7 +19,7 @@
         android:id="@+id/kInfoView"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:padding="3dp"
+        android:padding="5dp"
         android:textStyle="bold"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -30,18 +31,20 @@
         android:id="@+id/kAddress"
         android:layout_width="40dp"
         android:layout_height="35dp"
-        android:paddingRight="5dp"
+        android:contentDescription="@string/addressLine"
+        android:paddingStart="15dp"
         android:paddingLeft="15dp"
         android:paddingTop="0dp"
-        android:paddingBottom="13dp"
         android:paddingEnd="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="13dp"
         android:scaleX="0.7"
         android:scaleY="0.7"
+        android:textColor="@color/black"
         app:layout_constraintRight_toLeftOf="@+id/kAddress_Line"
         app:layout_constraintTop_toTopOf="@id/kAddress_Line"
         app:srcCompat="@drawable/icon_svg_house"
-        android:contentDescription="@string/addressLine"
-        android:paddingStart="15dp" />
+        tools:ignore="ImageContrastCheck" />
     <TextView
         android:id="@+id/kAddress_Line"
         android:layout_height="wrap_content"
@@ -91,12 +94,12 @@
     <Button
         android:id="@+id/kStreetViewLink"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
+        android:background="@color/topbar"
         android:text="@string/goToStreetView"
-        app:layout_constraintTop_toBottomOf="@id/kNoteContent"
+        app:backgroundTint="@color/topbar"
         app:layout_constraintStart_toStartOf="@id/kNoteContent"
-        android:background="@color/purple_200"
-        />
+        app:layout_constraintTop_toBottomOf="@id/kNoteContent" />
 
     <View
         android:layout_width="match_parent"

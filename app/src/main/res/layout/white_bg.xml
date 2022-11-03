@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/purple_200"
+    android:background="?attr/colorPrimary"
     android:id="@+id/white_bg_id"
     tools:context=".PrefSettingsFragment">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF" />
+        android:background="?android:attr/colorBackground" />
 
     <androidx.fragment.app.FragmentContainerView
         android:name="com.rodericko.bikepathtaipei.PrefSettingsFragment"

@@ -7,7 +7,7 @@
     <string name="poi">poi</string>
     <string name="zoom">15f</string>
 
-    <string name="information">About this Exit</string>
+    <string name="information">   About this Exit</string>
     <string name="openInGmaps">Open in Google Maps</string>
     <string name="addressLine">Where</string>
     <string name="goToStreetView">See StreetView</string>

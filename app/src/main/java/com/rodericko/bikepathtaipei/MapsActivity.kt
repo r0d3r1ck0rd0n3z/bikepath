@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
@@ -18,6 +19,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsIntent.COLOR_SCHEME_DARK
+import androidx.browser.customtabs.CustomTabsIntent.COLOR_SCHEME_SYSTEM
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
@@ -37,7 +42,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.ui.IconGenerator
 import com.rodericko.bikepathtaipei.databinding.ActivityMapsBinding
-import kotlinx.android.synthetic.main.exit_info.view.*
+import com.rodericko.bikepathtaipei.databinding.ExitInfoBinding
 import java.util.*
 
 
@@ -60,8 +65,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         mapFragment.activity?.title = "Where's the nearest exit?"
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this,R.color.topbar)))
 
         checkPlayServices()
+
 
     }
 
@@ -181,12 +188,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
 
-                Toast.makeText(
-                    applicationContext,
-                    ("\ud83d\ude01")+"  Restart app to apply updated permissions",
-                    Toast.LENGTH_LONG
-                ).show()
-
+                oSnack(("\ud83d\ude01")+"  Restart app to apply updated permissions")
             }
         }
     }
@@ -215,34 +217,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun checkPlayServices(): Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
         val resultCode = apiAvailability.isGooglePlayServicesAvailable(this)
-        val currentView: View = this.findViewById(android.R.id.content)
-
-        class CustomSnackBarAction : View.OnClickListener {
-
-            override fun onClick(v: View) {
-                oToast("This device is not supported.")
-            }
-        }
 
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
-                val snackBar = Snackbar.make(
-                    currentView,
-                    "I'm working on a version that doesn't require Google Play Services. Thank you for your patience.",
-                    Snackbar.LENGTH_INDEFINITE
-                )
-                snackBar.setAction("OK", CustomSnackBarAction())
-                snackBar.setActionTextColor(Color.WHITE)
-                snackBar.setTextColor(Color.YELLOW)
-                snackBar.setMaxInlineActionWidth(500)
-                val snackBarView = snackBar.view
-                snackBarView.setBackgroundColor(Color.DKGRAY)
-                val textView =
-                    snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
-                textView.setTextColor(Color.YELLOW)
-                textView.textSize = 28f
-                textView.maxLines = 5
-                snackBar.show()
+                oSnack("I'm working on a version that doesn't require Google Play Services. Thank you for your patience.")
             } else {
                 oToast("This device is not supported.")
                 finish()
@@ -306,6 +284,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             addNumbersOnTheMap()
             true
         }
+        R.id.about_dd_menu -> {
+            openURL()
+            true
+        }
         R.id.settings_dd_menu -> {
 
 
@@ -327,6 +309,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
             supportActionBar?.setCustomView (R.layout.pref_toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
             true
         }
@@ -542,12 +525,14 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    @SuppressLint("InflateParams")
+
     private fun showBottomDrawer(hTagged: Int) {
 
+        val binding = ExitInfoBinding.inflate(layoutInflater)
+
         val hAddress = mTwoDee[hTagged][3] as String
-        val hBottom = layoutInflater.inflate(R.layout.exit_info, null)
-        hBottom.kAddress_Line.text = hAddress
+        val hBottom = binding.root
+        binding.kAddressLine.text = hAddress
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(hBottom)
 
@@ -557,7 +542,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         dialog.show()
 
-        hBottom.kStreetViewLink.setOnClickListener {
+        binding.kStreetViewLink.setOnClickListener {
 
             val hStreetURL = mTwoDee[hTagged][2] as String
             val openURL = Intent(Intent.ACTION_VIEW)
@@ -591,6 +576,62 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun oToast(text: String) {
         Toast.makeText(applicationContext,text,Toast.LENGTH_LONG).show()
+    }
+
+    private fun oSnack(text: String) {
+        val currentView: View = this.findViewById(android.R.id.content)
+
+        class CustomSnackBarAction : View.OnClickListener {
+            override fun onClick(v: View) {
+                oToast("Stay hydrated. Thank you.")
+            }
+        }
+
+        val snackBar = Snackbar.make(
+            currentView,text,
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackBar.setAction("OK", CustomSnackBarAction())
+        snackBar.setActionTextColor(Color.WHITE)
+        snackBar.setTextColor(Color.CYAN)
+        snackBar.setMaxInlineActionWidth(500)
+        val snackBarView = snackBar.view
+        snackBarView.setBackgroundColor(Color.DKGRAY)
+        val textView =
+            snackBarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+        textView.setTextColor(Color.WHITE)
+        textView.maxLines = 5
+        snackBar.show()
+    }
+
+
+    private fun openURL() {
+
+        val colorInt = ContextCompat.getColor(this,R.color.topbar)
+
+        val darkParams = CustomTabColorSchemeParams.Builder()
+            .setToolbarColor(colorInt)
+            .setNavigationBarColor(colorInt)
+            .build()
+        val otherParams = CustomTabColorSchemeParams.Builder()
+            .setToolbarColor(colorInt)
+            .setNavigationBarColor(colorInt)
+            .build()
+
+        val url = "https://srv2.zoomable.ca/viewer.php?i=img0a4074458497d7fb__v_taipeibikeexits"
+
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .setColorScheme(COLOR_SCHEME_SYSTEM)
+            .setColorSchemeParams(COLOR_SCHEME_DARK, darkParams)
+            .setDefaultColorSchemeParams(otherParams)
+            .setInstantAppsEnabled(true)
+            .setShowTitle(true)
+            .setUrlBarHidingEnabled(true)
+            .build()
+
+
+        customTabsIntent.launchUrl(this, Uri.parse(url))
+
     }
 
     /**

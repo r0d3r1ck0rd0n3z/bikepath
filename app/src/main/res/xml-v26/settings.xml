@@ -30,45 +30,52 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:singleLineTitle="false"
         app:key="pClearAllMarkers"
-        app:singleLineTitle="false"
-        app:summary="@string/custom_markers_desc"
-        app:title="@string/CustomMarkers">
+        app:title="@string/CustomMarkers"
+        >
 
         <Preference
+            android:title="@string/reset_markers"
             android:key="@string/reset_markers"
-            android:title="Clear all markers"
-            app:summary="@string/reset_markers_desc" />
+            app:summary="@string/reset_markers_desc"
+            />
+
+        <Preference
+            android:title="@string/notes_settings"
+            android:key="pNotesMarker"
+            app:summary="@string/custom_markers_desc"
+            app:selectable="false"
+            />
 
     </PreferenceCategory>
 
 
     <PreferenceCategory
-        android:layout_width="wrap_content"
-        android:singleLineTitle="false"
         app:key="pExternalLinks"
-        app:singleLineTitle="false"
-        app:summary="@string/external_links_desc"
-        app:title="@string/external_links">
+        app:title="@string/external_links"
+        >
 
         <Preference
             android:title="@string/YouBike"
             app:key="pYouBikeLink"
             app:summary="@string/YouBike_desc">
-            <intent
-                android:action="android.intent.action.VIEW"
+            <intent android:action="android.intent.action.VIEW"
                 android:data="https://taipei.youbike.com.tw/station/map?_id=5cc29585083e7b5c1b035552" />
         </Preference>
 
         <Preference
             android:title="@string/feedback_link"
             app:summary="@string/feedback_link_desc">
-            <intent
-                android:action="android.intent.action.VIEW"
+            <intent android:action="android.intent.action.VIEW"
                 android:data="https://forms.gle/9Nf3FLB8JRVuxJjp9" />
         </Preference>
+
+        <Preference
+            android:title="@string/notes_settings"
+            android:key="pNotesLinks"
+            app:summary="@string/external_links_desc"
+            app:selectable="false"
+            />
 
     </PreferenceCategory>
 

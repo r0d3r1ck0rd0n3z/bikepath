@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            android:background="@color/design_default_color_primary"
+            android:background="@color/topbar"
             android:layout_margin="0px">
 
             <TextView
