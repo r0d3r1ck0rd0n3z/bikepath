@@ -12,9 +12,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -25,6 +23,7 @@ import androidx.browser.customtabs.CustomTabsIntent.COLOR_SCHEME_DARK
 import androidx.browser.customtabs.CustomTabsIntent.COLOR_SCHEME_SYSTEM
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
@@ -43,6 +42,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.ui.IconGenerator
 import com.rodericko.bikepathtaipei.databinding.ActivityMapsBinding
 import com.rodericko.bikepathtaipei.databinding.ExitInfoBinding
+import com.rodericko.bikepathtaipei.databinding.MoreInfoBinding
 import java.util.*
 
 
@@ -52,12 +52,11 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val mREQUESTLOCATIONPERMISSION  = 1
     private lateinit var binding: ActivityMapsBinding
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
-            super.onCreate(savedInstanceState)
+        installSplashScreen()
 
+        super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -68,12 +67,13 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this,R.color.topbar)))
 
         checkPlayServices()
-
-
     }
 
 
+    // Do stuff when user presses the back button on the device
+
     override fun onSupportNavigateUp(): Boolean {
+
         if (supportFragmentManager.popBackStackImmediate()) {
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
@@ -114,22 +114,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setMapLongClick(mMap)
         setPoiClick(mMap)
         applyUserSettings()
-
-        val mGOLatLng = LatLng(25.12299, 121.46196)
-        val mGOMapOpt = GroundOverlayOptions()
-            .image(BitmapDescriptorFactory.fromResource(R.drawable.sampleimage))
-            .position(mGOLatLng, 50f)
-            .clickable(true)
-
-
-        mMap.addGroundOverlay(mGOMapOpt)?.tag = "haha"
-        mMap.setOnGroundOverlayClickListener {
-
-           if (it.tag == "haha") {
-              oToast("This is a haha message")
-           }
-        }
-
 
         /**
         * ~~~~~~~ Enable location data layer. ~~~~~~~
@@ -285,7 +269,27 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
         R.id.about_dd_menu -> {
-            openURL()
+
+            supportFragmentManager
+                .beginTransaction()
+                .setTransition(TRANSIT_FRAGMENT_OPEN)
+                .setReorderingAllowed(true)
+                .addToBackStack("DefaultView")
+                .add(R.id.map, MoreInfoFrag())
+                .commit()
+
+
+            supportFragmentManager.addOnBackStackChangedListener {
+                if (supportFragmentManager.backStackEntryCount == 0) {
+                    setTitle(R.string.more_info_title)
+                }
+            }
+
+            supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+            supportActionBar?.setCustomView (R.layout.more_toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
             true
         }
         R.id.settings_dd_menu -> {
@@ -317,6 +321,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("onSupportNavigateUp()"))
     override fun onBackPressed() {
         onSupportNavigateUp()
     }
@@ -604,52 +609,21 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         snackBar.show()
     }
 
-
-    private fun openURL() {
-
-        val colorInt = ContextCompat.getColor(this,R.color.topbar)
-
-        val darkParams = CustomTabColorSchemeParams.Builder()
-            .setToolbarColor(colorInt)
-            .setNavigationBarColor(colorInt)
-            .build()
-        val otherParams = CustomTabColorSchemeParams.Builder()
-            .setToolbarColor(colorInt)
-            .setNavigationBarColor(colorInt)
-            .build()
-
-        val url = "https://srv2.zoomable.ca/viewer.php?i=img0a4074458497d7fb__v_taipeibikeexits"
-
-        val customTabsIntent = CustomTabsIntent.Builder()
-            .setColorScheme(COLOR_SCHEME_SYSTEM)
-            .setColorSchemeParams(COLOR_SCHEME_DARK, darkParams)
-            .setDefaultColorSchemeParams(otherParams)
-            .setInstantAppsEnabled(true)
-            .setShowTitle(true)
-            .setUrlBarHidingEnabled(true)
-            .build()
-
-
-        customTabsIntent.launchUrl(this, Uri.parse(url))
-
-    }
-
     /**
      * ~~~~~~~ Last brace below ~~~~~~~
      */
 
 }
 
+
+
+// ~~~~~~~~~~~~~ [PREFERENCE] FRAGMENT LOADER ~~~~~~~~~~~~~
+
 class PrefBackgroundFragment : Fragment(R.layout.white_bg)
 
 class PrefSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
-
-        // fun oToast(text: String) {
-        //     Toast.makeText(context,text,Toast.LENGTH_LONG).show()
-        // }
-
 
         // Get current pref values
 
@@ -708,16 +682,6 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
                 true
             }
 
-
-        val vMapStyles: Preference? = findPreference(getString(R.string.YouBike))
-        vMapStyles?.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener {
-
-                it.setIcon(R.drawable.icon_radio_grey)
-                true
-        }
-
-
         // Do stuff when user clicks the Reset All Markers button
 
         val vResetMarkers: Preference? = findPreference(getString(R.string.reset_markers))
@@ -739,4 +703,64 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
 
     }
+}
+
+
+// ~~~~~~~~~~~~~ [MORE INFO] FRAGMENT LOADER ~~~~~~~~~~~~~
+
+
+
+class MoreInfoToolbar : Fragment(R.layout.more_toolbar)
+class MoreInfoFrag : Fragment(R.layout.more_info) {
+
+    private var _binding: MoreInfoBinding? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = MoreInfoBinding.bind(view)
+        _binding = binding
+        binding.about04.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/WhatsTheWeather.html") }
+        binding.about07.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapsVar1.html" ) }
+        binding.about08.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapsVar2.html" ) }
+        binding.about09.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapsVar3.html" ) }
+        binding.about12.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar1.html" ) }
+        binding.about13.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar2.html" ) }
+        binding.about14.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar3.html" ) }
+        binding.about15.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar4.html" ) }
+        binding.about17.setOnClickListener { openURL( "https://data.gov.tw/dataset/143893" ) }
+        binding.about19.setOnClickListener { openURL( "https://ko-fi.com/threesixtydegrees" ) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun openURL( text: String) {
+
+        val colorInt = ContextCompat.getColor( requireContext(),R.color.topbar)
+
+        val darkParams = CustomTabColorSchemeParams.Builder()
+            .setToolbarColor(colorInt)
+            .setNavigationBarColor(colorInt)
+            .build()
+        val otherParams = CustomTabColorSchemeParams.Builder()
+            .setToolbarColor(colorInt)
+            .setNavigationBarColor(colorInt)
+            .build()
+
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .setColorScheme(COLOR_SCHEME_SYSTEM)
+            .setColorSchemeParams(COLOR_SCHEME_DARK, darkParams)
+            .setDefaultColorSchemeParams(otherParams)
+            .setInstantAppsEnabled(true)
+            .setShowTitle(true)
+            .setUrlBarHidingEnabled(true)
+            .build()
+
+
+        customTabsIntent.launchUrl( requireContext(), Uri.parse(text))
+
+    }
+
 }

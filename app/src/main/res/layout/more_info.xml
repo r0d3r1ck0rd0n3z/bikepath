@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_ScrollWrapper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:layout_alignParentTop="true"
+    android:layout_above="@+id/layout_footer"  >
+
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MoreInfoFrag"
+    android:theme="@style/MoreInfoTheme"
+    android:id="@+id/ll_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/AboutTextViewStyles"
+        android:id="@+id/about_01"
+        android:text="@string/about_01" />
+
+    <TextView
+        style="@style/AboutHeaderStyles"
+        android:id="@+id/about_02"
+        android:text="@string/about_02" />
+
+    <TextView
+        style="@style/AboutTextViewStyles"
+        android:id="@+id/about_03"
+        android:text="@string/about_03" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_04"
+        android:text="@string/about_04" />
+
+    <TextView
+        style="@style/Separators"
+        android:text="@string/separate"   />
+
+    <TextView
+        style="@style/AboutHeaderStyles"
+        android:id="@+id/about_05"
+        android:text="@string/about_05" />
+
+    <TextView
+        style="@style/AboutTextViewStyles"
+        android:id="@+id/about_06"
+        android:text="@string/about_06" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_07"
+        android:text="@string/about_07" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_08"
+        android:text="@string/about_08" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_09"
+        android:text="@string/about_09" />
+
+    <TextView
+        style="@style/Separators"
+        android:text="@string/separate"   />
+
+    <TextView
+        style="@style/AboutHeaderStyles"
+        android:id="@+id/about_10"
+        android:text="@string/about_10" />
+
+    <TextView
+        style="@style/AboutTextViewStyles"
+        android:id="@+id/about_11"
+        android:text="@string/about_11" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_12"
+        android:text="@string/about_12" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_13"
+        android:text="@string/about_13" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_14"
+        android:text="@string/about_14" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_15"
+        android:text="@string/about_15" />
+
+    <TextView
+        style="@style/Separators"
+        android:text="@string/separate"   />
+
+    <TextView
+        style="@style/AboutHeaderStyles"
+        android:id="@+id/about_16"
+        android:text="@string/about_16" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_17"
+        android:text="@string/about_17" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_18"
+        android:text="@string/about_18" />
+
+    <Button
+        style="@style/AboutButtonStyles"
+        android:id="@+id/about_19"
+        android:text="@string/about_19" />
+
+
+</LinearLayout>
+
+</ScrollView>
