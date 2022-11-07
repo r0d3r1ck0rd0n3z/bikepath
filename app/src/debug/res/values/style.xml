@@ -64,4 +64,7 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
+    <style name="PreferenceThemeOverlay" parent="@style/AppTheme">
+        <item name="android:background">?android:attr/colorBackground</item>
+    </style>
 </resources>

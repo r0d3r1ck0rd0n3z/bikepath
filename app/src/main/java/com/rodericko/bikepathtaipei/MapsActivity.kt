@@ -75,9 +75,9 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onSupportNavigateUp(): Boolean {
 
         if (supportFragmentManager.popBackStackImmediate()) {
+            supportFragmentManager.popBackStack()
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
-            supportFragmentManager.popBackStack()
             setTitle(R.string.exit_question)
 
             // Handle Reset All Markers command from settings menu
@@ -99,6 +99,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             applyUserSettings()
             return true
         }
+
         return super.onSupportNavigateUp()
     }
 
@@ -289,7 +290,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             supportActionBar?.setCustomView (R.layout.more_toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
             true
         }
         R.id.settings_dd_menu -> {
@@ -300,7 +300,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .setTransition(TRANSIT_FRAGMENT_OPEN)
                 .setReorderingAllowed(true)
                 .addToBackStack("DefaultView")
-                .add(R.id.map, PrefBackgroundFragment())
+                .add(R.id.map, PrefSettingsFragment())
                 .commit()
 
 
@@ -313,7 +313,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
             supportActionBar?.setCustomView (R.layout.pref_toolbar)
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
             true
         }
@@ -533,8 +532,9 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun showBottomDrawer(hTagged: Int) {
 
-        val binding = ExitInfoBinding.inflate(layoutInflater)
+        super.getTheme().applyStyle(R.style.AppTheme, true)
 
+        val binding = ExitInfoBinding.inflate(layoutInflater)
         val hAddress = mTwoDee[hTagged][3] as String
         val hBottom = binding.root
         binding.kAddressLine.text = hAddress
@@ -616,13 +616,13 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 }
 
 
-
 // ~~~~~~~~~~~~~ [PREFERENCE] FRAGMENT LOADER ~~~~~~~~~~~~~
-
-class PrefBackgroundFragment : Fragment(R.layout.white_bg)
 
 class PrefSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+
+        context?.theme?.applyStyle(R.style.PreferenceThemeOverlay, true)
+
         setPreferencesFromResource(R.xml.settings, rootKey)
 
         // Get current pref values
@@ -720,14 +720,15 @@ class MoreInfoFrag : Fragment(R.layout.more_info) {
         val binding = MoreInfoBinding.bind(view)
         _binding = binding
         binding.about04.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/WhatsTheWeather.html") }
-        binding.about07.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapsVar1.html" ) }
-        binding.about08.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapsVar2.html" ) }
-        binding.about09.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapsVar3.html" ) }
+        binding.about07.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapVar1.html" ) }
+        binding.about08.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapVar2.html" ) }
+        binding.about09.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapVar3.html" ) }
         binding.about12.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar1.html" ) }
         binding.about13.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar2.html" ) }
         binding.about14.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar3.html" ) }
         binding.about15.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar4.html" ) }
         binding.about17.setOnClickListener { openURL( "https://data.gov.tw/dataset/143893" ) }
+        binding.about18.setOnClickListener { openURL( "https://r360v.blogspot.com/search/label/trbe" ) }
         binding.about19.setOnClickListener { openURL( "https://ko-fi.com/threesixtydegrees" ) }
     }
 
