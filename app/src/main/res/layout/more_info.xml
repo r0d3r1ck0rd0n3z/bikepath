@@ -2,6 +2,7 @@
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_ScrollWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,7 +10,7 @@
     android:layout_alignParentTop="true"
     android:layout_above="@+id/layout_footer"  >
 
-<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     tools:context=".MoreInfoFrag"
     android:theme="@style/MoreInfoTheme"
     android:id="@+id/ll_main_layout"
@@ -41,7 +42,8 @@
 
     <TextView
         style="@style/Separators"
-        android:text="@string/separate"   />
+        android:text="@string/separate"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         style="@style/AboutHeaderStyles"
@@ -70,7 +72,8 @@
 
     <TextView
         style="@style/Separators"
-        android:text="@string/separate"   />
+        android:text="@string/separate"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         style="@style/AboutHeaderStyles"
@@ -111,15 +114,30 @@
         android:id="@+id/about_16"
         android:text="@string/about_16" />
 
+    <TextView
+        style="@style/AboutTextViewStyles"
+        android:id="@+id/other_01"
+        android:text="@string/other_01" />
+
     <Button
         style="@style/AboutButtonStyles"
         android:id="@+id/about_17"
         android:text="@string/about_17" />
 
+    <TextView
+        style="@style/AboutTextViewStyles"
+        android:id="@+id/other_02"
+        android:text="@string/other_02" />
+
     <Button
         style="@style/AboutButtonStyles"
         android:id="@+id/about_18"
         android:text="@string/about_18" />
+
+    <TextView
+        style="@style/AboutTextViewStyles"
+        android:id="@+id/other_03"
+        android:text="@string/other_03" />
 
     <Button
         style="@style/AboutButtonStyles"

@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Taipei Riverside Exits</string>
-    <string name="title_activity_maps">Taipei Riverside Exits</string>
+    <string name="app_name">Taipei Riverside Bike Exits</string>
+    <string name="title_activity_maps">Taipei Riverside Bike Exits</string>
     <string name="map_id">dfb355c0f58c7df8</string>
     <string name="lat_long_snippet">Lat: %1$.5f, Long: %2$.5f</string>
     <string name="dropped_pin">Dropped Pin</string>
@@ -10,7 +10,7 @@
     <string name="information">About this exit</string>
     <string name="openInGmaps">Open in Google Maps</string>
     <string name="addressLine">Where</string>
-    <string name="goToStreetView">See StreetView \u2197\uFE0F </string>
+    <string name="goToStreetView">See StreetView </string>
     <string name="exit_question"><small>Where\'s the nearest exit?</small></string>
 
     <string name="bridges">Show bridges</string>
@@ -88,10 +88,13 @@
     <string name="about_14">New Taipei City variant 3</string>
     <string name="about_15">New Taipei City variant 4</string>
     <string name="about_16"><big>📋 </big> Others</string>
-    <string name="about_17">JSON files from government website</string>
+    <string name="about_17">JSON files from gov website</string>
     <string name="about_18">Read the documentation</string>
-    <string name="about_19">Support me! Buy me a coffee</string>
+    <string name="about_19">Buy me a coffee</string>
     <string name="separate"><small> ● ● ● </small></string>
+    <string name="other_01">This app uses data published by data.gov.tw.</string>
+    <string name="other_02">For tips on using/troubleshooting the app, or if you have questions on how the data was processed, I provide more juicy details here:</string>
+    <string name="other_03">Like my work? Support me:  </string>
 
     <string name="langXX">Info panel language</string>
     <string name="langEN">English</string>

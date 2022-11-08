@@ -82,7 +82,7 @@
             android:title="@string/feedback_link"
             app:summary="@string/feedback_link_desc">
             <intent android:action="android.intent.action.VIEW"
-                android:data="https://forms.gle/9Nf3FLB8JRVuxJjp9" />
+                android:data="https://r360v.blogspot.com/2022/11/send-me-feedback.html" />
         </Preference>
 
         <Preference

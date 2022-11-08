@@ -48,6 +48,7 @@
         android:layout_height="48dp"
         android:layout_margin="10dp"
         android:background="@color/topbar"
+        android:drawableEnd="@drawable/arrow_out"
         android:text="@string/goToStreetView"
         />
 
