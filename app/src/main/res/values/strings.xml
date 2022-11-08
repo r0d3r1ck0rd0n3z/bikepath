@@ -1,23 +1,16 @@
 <resources>
     <string name="app_name">Taipei Riverside Bike Exits</string>
     <string name="title_activity_maps">Taipei Riverside Bike Exits</string>
-    <string name="map_id">dfb355c0f58c7df8</string>
-    <string name="lat_long_snippet">Lat: %1$.5f, Long: %2$.5f</string>
     <string name="dropped_pin">Dropped Pin</string>
-    <string name="poi">poi</string>
-    <string name="zoom">15f</string>
 
     <string name="information">About this exit</string>
-    <string name="openInGmaps">Open in Google Maps</string>
     <string name="addressLine">Where</string>
     <string name="goToStreetView">See StreetView </string>
     <string name="exit_question"><small>Where\'s the nearest exit?</small></string>
 
     <string name="bridges">Show bridges</string>
-    <string name="infoIcon">Info Icon</string>
     <string name="noteContent">Standard exit</string>
     <string name="YouBike">YouBike</string>
-    <string name="TestString">Item</string>
 
     <string name="MapTypes">Map type</string>
     <string name="MapStyles">Map style</string>
@@ -25,9 +18,7 @@
     <string name="minimal_map">Basic grey</string>
     <string name="hybrid_map">Satellite + labels</string>
     <string name="satellite_map">Satellite view only</string>
-    <string name="terrain_map">Standard map</string>
 
-    <string name="marker_types">Marker type</string>
     <string name="mType_circles">Circles</string>
     <string name="mType_markers">Markers</string>
     <string name="mType_numbers">Numbers</string>
@@ -37,21 +28,11 @@
     <string name="about_the_app">More information</string>
     <string name="feedback_link">Send me feedback!</string>
     <string name="external_links">Online resources</string>
-    <string name="general_settings">General</string>
     <string name="select_an_option">Select an option</string>
     <string name="customize_appearance">Map appearance</string>
     <string name="notes_settings"><i><small>Notes</small></i></string>
-    <string name="howDoI_settings"><i><small>How do I...</small></i></string>
     <string name="more_info_title">More information</string>
 
-    <string name="pNormal_map">NormalMap</string>
-    <string name="pHybrid_map">SatelliteLabels</string>
-    <string name="pMinimal_map">BasicGrey</string>
-    <string name="pTerrain_map">StandardMap</string>
-    <string name="pSatellite_map">SatelliteViewOnly</string>
-
-    <string name="blank"> </string>
-    <string name="MapType">Map type</string>
     <string name="MapStyle">Map style</string>
     <string name="MarkerType">Marker type</string>
     <string name="CustomMarkers">Custom markers</string>
