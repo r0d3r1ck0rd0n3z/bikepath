@@ -532,6 +532,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+    @Suppress("MoveVariableDeclarationIntoWhen")
     @SuppressLint("SetTextI18n")
     private fun showBottomDrawer(hTagged: Int) {
 
@@ -542,7 +543,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val n = sharedPrefA.getInt(getString(R.string.langXX), dDefaultLang)
 
 
-        var lang = when (n) {
+        val lang = when (n) {
             0 -> mLocation_data_en
             1 -> mLocation_data_ch
             else -> {
