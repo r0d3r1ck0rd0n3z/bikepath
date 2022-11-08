@@ -1,7 +1,7 @@
 package com.rodericko.bikepathtaipei
 
 val mLocation_data_en = arrayOf(
-    arrayOf(1.97614441,1.5563005,"Type of 'exit structure' to look for","Name of Riverside Park where exit is located","Click the reticle at the top right to jump to your position","https://r360v.blogspot.com/search/label/trbe"),
+    arrayOf(1.97614441,1.5563005,"Type of 'exit structure' to look for","Name of Riverside Park where exit is located","Click the reticle at the top right to jump to your position ⬆","https://r360v.blogspot.com/search/label/trbe"),
     arrayOf(24.97614441,121.5563005,"Bicycle trail","Daonan Left Bank Riverside Park","Left bank of Jingmei River-Upstream side of Yishou Bridge","https://maps.google.com/maps?q=&layer=c&cbll=24.97614441,121.5563005"),
     arrayOf(24.97700048,121.5549645,"Bicycle trail","Daonan Right Bank Riverside Park","Right bank of Jingmei River-Lower Yishou Bridge","https://maps.google.com/maps?q=&layer=c&cbll=24.97700048,121.5549645"),
     arrayOf(24.9799251,121.5673667,"Over embankment ramp","Daonan Left Bank Riverside Park","Downstream of Hengguang Bridge on the left bank of Jingmei River","https://maps.google.com/maps?q=&layer=c&cbll=24.9799251,121.5673667"),

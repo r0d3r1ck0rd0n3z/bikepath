@@ -65,6 +65,11 @@
     </item>
 
     <item
+        android:id="@+id/settings_showBridges"
+        android:title="@string/bridges" >
+    </item>
+
+    <item
         android:id="@+id/settings_dd_menu"
         android:title="@string/settings" >
     </item>

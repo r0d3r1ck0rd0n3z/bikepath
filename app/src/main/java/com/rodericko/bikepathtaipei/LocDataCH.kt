@@ -1,7 +1,7 @@
 package com.rodericko.bikepathtaipei
 
 val mLocation_data_ch = arrayOf(
-    arrayOf(1.97614441,1.5563005,"Type of 'exit structure' to look for","Name of Riverside Park where exit is located","Click the reticle at the top right to jump to your position","https://r360v.blogspot.com/search/label/trbe"),    arrayOf(24.97614441,121.5563005,"自行車牽引道","道南左岸河濱公園","景美溪左岸-一壽橋上游側","https://maps.google.com/maps?q=&layer=c&cbll=24.97614441,121.5563005"),
+    arrayOf(1.97614441,1.5563005,"Type of 'exit structure' to look for","Name of Riverside Park where exit is located","Click the reticle at the top right to jump to your position \u2B06\uFE0F","https://r360v.blogspot.com/search/label/trbe"),    arrayOf(24.97614441,121.5563005,"自行車牽引道","道南左岸河濱公園","景美溪左岸-一壽橋上游側","https://maps.google.com/maps?q=&layer=c&cbll=24.97614441,121.5563005"),
     arrayOf(24.97700048,121.5549645,"自行車牽引道","道南右岸河濱公園","景美溪右岸-一壽橋下游","https://maps.google.com/maps?q=&layer=c&cbll=24.97700048,121.5549645"),
     arrayOf(24.9799251,121.5673667,"越堤坡道","道南左岸河濱公園","景美溪左岸恆光橋下游","https://maps.google.com/maps?q=&layer=c&cbll=24.9799251,121.5673667"),
     arrayOf(24.98311522,121.5702741,"自行車牽引道","道南右岸河濱公園","景美溪右岸-道南-木新路2段161巷19弄","https://maps.google.com/maps?q=&layer=c&cbll=24.98311522,121.5702741"),

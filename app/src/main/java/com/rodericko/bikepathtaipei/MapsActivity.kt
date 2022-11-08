@@ -269,6 +269,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             addNumbersOnTheMap()
             true
         }
+        R.id.settings_showBridges -> {
+            addBridgesOnTheMap()
+            true
+        }
         R.id.about_dd_menu -> {
 
             supportFragmentManager
@@ -400,7 +404,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     private fun createCircleMarks(mPoint01: Any, mPoint02: Any, str: Any, m: Int = 0) {
 
         val mLat =  mPoint01 as Double
@@ -446,6 +449,54 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         with (sharedPref.edit()) {
             putInt(getString(R.string.MarkerType), 0)
             apply()
+        }
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun addBridgesOnTheMap() {
+
+        val length = mBridge_data_en.size - 1
+        for (i in 0..length) {
+            val mLat = mBridge_data_en[i][0]
+            val mLon = mBridge_data_en[i][1]
+            createCircleMarks(mLat, mLon, i, 0)
+        }
+
+        super.getTheme().applyStyle(R.style.AppTheme, true)
+
+        mMap.setOnCircleClickListener {
+            val hTagged = it.tag as Int
+
+            val binding = BottomDrawerBinding.inflate(layoutInflater)
+            val hBottom = binding.root
+
+            val exitType = mBridge_data_en[hTagged][2] as String
+            val parkName = mBridge_data_en[hTagged][3] as String
+            val hAddress = mBridge_data_en[hTagged][4] as String
+
+            binding.kAddressLine.text = hAddress
+            binding.kNoteContent.text = exitType
+            binding.kInfoView.text = "\uD83D\uDD00 $parkName"
+
+            val dialog = BottomSheetDialog(this)
+            dialog.setContentView(hBottom)
+
+            hBottom.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+
+            binding.kStreetViewLink.setOnClickListener {
+
+                val hStreetURL = mBridge_data_en[hTagged][5] as String
+                val openURL = Intent(Intent.ACTION_VIEW)
+                openURL.data = Uri.parse(hStreetURL)
+                startActivity(openURL)
+
+            }
+
         }
 
     }
