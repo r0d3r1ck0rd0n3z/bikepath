@@ -14,7 +14,7 @@
             app:useSimpleSummaryProvider="true"
             app:entries="@array/aMapStyleOptions"
             app:entryValues="@array/aMapStyleOptions_values"
-            app:dialogTitle="@string/select_an_option"
+            app:dialogTitle="@string/MapStyle"
             app:summary="%s"
             android:summary="%s"/>
 
@@ -24,10 +24,25 @@
             app:useSimpleSummaryProvider="true"
             app:entries="@array/aMarkerStyleOptions"
             app:entryValues="@array/aMarkerStyleOptions_values"
-            app:dialogTitle="@string/select_an_option"/>
-
+            app:dialogTitle="@string/MarkerType"/>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="langlang"
+        app:title="@string/langXX"
+        >
+
+        <ListPreference
+            app:key="languageTypeList"
+            app:title="@string/langXX"
+            app:useSimpleSummaryProvider="true"
+            app:entries="@array/aLanguageOptions"
+            app:entryValues="@array/aLanguageOptions_values"
+            app:dialogTitle="@string/select_an_option"/>
+
+    </PreferenceCategory>
+
 
     <PreferenceCategory
         app:key="pClearAllMarkers"

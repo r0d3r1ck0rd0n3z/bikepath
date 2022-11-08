@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/kInfoView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="9dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/topbar"
+        android:text="@string/information"
+        />
+
+    <TextView
+        android:id="@+id/kAddress_Line"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/addressLine"
+        android:padding="10dp"
+        android:gravity="top"
+        app:drawableLeftCompat="@drawable/icon_house"
+        android:drawablePadding="13dp"
+        />
+
+
+    <TextView
+        android:id="@+id/kNoteContent"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/noteContent"
+        android:padding="5dp"
+        app:drawableLeftCompat="@drawable/icon_pin"
+        android:drawablePadding="10dp"
+        />
+
+
+    <Button
+        android:id="@+id/kStreetViewLink"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        android:background="@color/topbar"
+        android:text="@string/goToStreetView"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        />
+
+</LinearLayout>

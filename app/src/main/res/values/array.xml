@@ -28,4 +28,15 @@
         <item>2</item> <!-- numbers-->
     </string-array>
 
+
+    <string-array name="aLanguageOptions">
+        <item>@string/langEN</item>
+        <item>@string/langZH</item>
+    </string-array>
+
+    <string-array name="aLanguageOptions_values">
+        <item>0</item> <!-- English -->
+        <item>1</item> <!-- Chinese-->
+    </string-array>
+
 </resources>

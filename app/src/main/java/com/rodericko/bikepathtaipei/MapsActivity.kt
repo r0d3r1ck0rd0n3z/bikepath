@@ -41,8 +41,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.ui.IconGenerator
 import com.rodericko.bikepathtaipei.databinding.ActivityMapsBinding
-import com.rodericko.bikepathtaipei.databinding.ExitInfoBinding
 import com.rodericko.bikepathtaipei.databinding.MoreInfoBinding
+import com.rodericko.bikepathtaipei.databinding.BottomDrawerBinding
 import java.util.*
 
 
@@ -430,11 +430,12 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.clear()
 
-        for (i in 0..120) {
-            val mLat = mTwoDee[i][0]
-            val mLon = mTwoDee[i][1]
+        val length = mLocation_data_en.size - 1
+        for (i in 0..length) {
+            val mLat = mLocation_data_en[i][0]
+            val mLon = mLocation_data_en[i][1]
             createCircleMarks(mLat, mLon, i, 0)
-            }
+        }
 
         mMap.setOnCircleClickListener {
             val hTagged = it.tag as Int
@@ -454,10 +455,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.clear()
 
-        for (i in 0..120) {
-            val mLat  = mTwoDee[i][0]
-            val mLang = mTwoDee[i][1]
-
+        val length = mLocation_data_en.size - 1
+        for (i in 0..length) {
+            val mLat  = mLocation_data_en[i][0]
+            val mLang = mLocation_data_en[i][1]
             createCircleMarks(mLat, mLang, i, 1)
 
             mLat as Double
@@ -491,9 +492,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.clear()
 
-        for (i in 0..120) {
-            val mLat  = mTwoDee[i][0]
-            val mLang = mTwoDee[i][1]
+        val length = mLocation_data_en.size - 1
+        for (i in 0..length) {
+            val mLat  = mLocation_data_en[i][0]
+            val mLang = mLocation_data_en[i][1]
 
             createCircleMarks(mLat, mLang, i, 1)
 
@@ -530,14 +532,36 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun showBottomDrawer(hTagged: Int) {
 
         super.getTheme().applyStyle(R.style.AppTheme, true)
 
-        val binding = ExitInfoBinding.inflate(layoutInflater)
-        val hAddress = mTwoDee[hTagged][3] as String
+        val sharedPrefA = getPreferences(MODE_PRIVATE)
+        val dDefaultLang = 0
+        val n = sharedPrefA.getInt(getString(R.string.langXX), dDefaultLang)
+
+
+        var lang = when (n) {
+            0 -> mLocation_data_en
+            1 -> mLocation_data_ch
+            else -> {
+                mLocation_data_en
+
+            }
+        }
+
+        val binding = BottomDrawerBinding.inflate(layoutInflater)
         val hBottom = binding.root
+
+        val exitType = lang[hTagged][2] as String
+        val parkName = lang[hTagged][3] as String
+        val hAddress = lang[hTagged][4] as String
+
         binding.kAddressLine.text = hAddress
+        binding.kNoteContent.text = exitType
+        binding.kInfoView.text = "[$hTagged] $parkName"
+
         val dialog = BottomSheetDialog(this)
         dialog.setContentView(hBottom)
 
@@ -549,7 +573,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.kStreetViewLink.setOnClickListener {
 
-            val hStreetURL = mTwoDee[hTagged][2] as String
+            val hStreetURL = lang[hTagged][5] as String
             val openURL = Intent(Intent.ACTION_VIEW)
             openURL.data = Uri.parse(hStreetURL)
             startActivity(openURL)
@@ -575,6 +599,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 addCirclesOnTheMap()
             }
         }
+
+
 
     }
 
@@ -681,6 +707,30 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
                 true
             }
+
+
+        // Update marker pref to show currently selected language
+
+        val dCurrentInfoL = sharedPref.getInt(getString(R.string.langXX), dDefaultMapType)
+        val infLangOption: ListPreference? = findPreference("languageTypeList")
+        infLangOption?.title = getString(mLanguageTypes[dCurrentInfoL])
+        infLangOption?.value = "$dCurrentInfoL"
+
+        // Do stuff when user clicks on option for marker types
+
+        infLangOption?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                val x: Int = newValue.toString().toInt()
+
+                infLangOption?.title = getString(mLanguageTypes[x])
+                with (sharedPref.edit()) {
+                    putInt(getString(R.string.langXX), x)
+                    apply()
+                }
+
+                true
+            }
+
 
         // Do stuff when user clicks the Reset All Markers button
 

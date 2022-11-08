@@ -7,10 +7,10 @@
     <string name="poi">poi</string>
     <string name="zoom">15f</string>
 
-    <string name="information"> ‎ About this exit</string>
+    <string name="information">About this exit</string>
     <string name="openInGmaps">Open in Google Maps</string>
     <string name="addressLine">Where</string>
-    <string name="goToStreetView">See StreetView</string>
+    <string name="goToStreetView">See StreetView ⇲ </string>
     <string name="exit_question"><small>Where\'s the nearest exit?</small></string>
 
     <string name="pinIcon">Pin icon</string>
@@ -89,7 +89,14 @@
     <string name="about_15">New Taipei City variant 4</string>
     <string name="about_16"><big>📋 </big> Others</string>
     <string name="about_17">JSON files from government website</string>
-    <string name="about_18">Attributions and more info on the map sources</string>
+    <string name="about_18">Read the documentation</string>
     <string name="about_19">Support me! Buy me a coffee</string>
     <string name="separate"><small> ● ● ● </small></string>
+
+    <string name="langXX">Info panel language</string>
+    <string name="langEN">English</string>
+    <string name="langZH">Chinese</string>
+    <string name="langEN_desc">Show info in machine-translated English</string>
+    <string name="langZH_desc">Use the original Chinese text</string>
+
 </resources>
