@@ -46,7 +46,7 @@ For usage instructions, please visit the following page:
 
 For a quick overview of the app's features, see video below:
 
-https://user-images.githubusercontent.com/86142912/201137245-b57451d4-7f17-4e7a-bf18-db91e4d4c98e.mp4
+https://user-images.githubusercontent.com/86142912/201138586-ac34e2da-b26f-4c6f-8c99-15c18a059dc0.mp4
 
 Watch the full vid on [YouTube](https://youtu.be/JAVwOdrk7Y4).
 
