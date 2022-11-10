@@ -48,7 +48,7 @@ For a quick overview of the app's features, see video below:
 
 https://user-images.githubusercontent.com/86142912/201138586-ac34e2da-b26f-4c6f-8c99-15c18a059dc0.mp4
 
-Watch the full vid on [YouTube](https://youtu.be/JAVwOdrk7Y4).
+Watch the full hi-res vid on [YouTube](https://youtu.be/JAVwOdrk7Y4).
 
 <br>
 
