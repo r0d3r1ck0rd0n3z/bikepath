@@ -2,6 +2,7 @@ package com.rodericko.bikepathtaipei
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -41,8 +42,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.ui.IconGenerator
 import com.rodericko.bikepathtaipei.databinding.ActivityMapsBinding
-import com.rodericko.bikepathtaipei.databinding.MoreInfoBinding
 import com.rodericko.bikepathtaipei.databinding.BottomDrawerBinding
+import com.rodericko.bikepathtaipei.databinding.MoreInfoBinding
 import java.util.*
 
 
@@ -88,11 +89,11 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (dCurrentMarkerState == 1) {
                 mMap.clear()
                 applyUserSettings()
-                }
+            }
             with (sharedPref.edit()) {
                 putInt(getString(R.string.reset_markers), dDefaultMarkerState)
                 apply()
-                }
+            }
 
             // Handle user customization of map styles from settings menu
 
@@ -117,11 +118,11 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         applyUserSettings()
 
         /**
-        * ~~~~~~~ Enable location data layer. ~~~~~~~
-        * Get 'last known location' details from LocationManager.
-        * Use that data to zoom to user's last known location.
-        * If no last known location, show the whole map.
-        */
+         * ~~~~~~~ Enable location data layer. ~~~~~~~
+         * Get 'last known location' details from LocationManager.
+         * Use that data to zoom to user's last known location.
+         * If no last known location, show the whole map.
+         */
 
         enableMyLocation()
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -148,8 +149,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // region ➕ ~~~~~~~ Permissions ~~~~~~~
     /**
-    * ~~~~~~~ Create a brand new section just to handle permissions. ~~~~~~~
-    */
+     * ~~~~~~~ Create a brand new section just to handle permissions. ~~~~~~~
+     */
 
 
     // Checks that users have given permission
@@ -194,8 +195,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-    * ~~~~~~~ end of permissions section ~~~~~~~
-    */
+     * ~~~~~~~ end of permissions section ~~~~~~~
+     */
     // endregion permissions x
 
 
@@ -420,10 +421,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             circles
                 .strokeColor(0x00000000)
                 .zIndex(5F)
-           }
+        }
 
-         val mPlacedCircle = mMap.addCircle(circles.center(mConvPoint))
-         mPlacedCircle.tag = mTagged
+        val mPlacedCircle = mMap.addCircle(circles.center(mConvPoint))
+        mPlacedCircle.tag = mTagged
 
     }
 
@@ -591,10 +592,11 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val sharedPrefA = getPreferences(MODE_PRIVATE)
         val dDefaultLang = 0
-        val n = sharedPrefA.getInt(getString(R.string.langXX), dDefaultLang)
+        val dLang = sharedPrefA.getInt(getString(R.string.langXX), dDefaultLang)
+        val dOpen = sharedPrefA.getInt(getString(R.string.openDefault_desc), dDefaultLang)
 
 
-        val lang = when (n) {
+        val lang = when (dLang) {
             0 -> mLocation_data_en
             1 -> mLocation_data_ch
             else -> {
@@ -628,7 +630,20 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val hStreetURL = lang[hTagged][5] as String
             val openURL = Intent(Intent.ACTION_VIEW)
             openURL.data = Uri.parse(hStreetURL)
-            startActivity(openURL)
+
+            if ( dOpen == 1 ) {
+
+                try {
+                    openURL.setPackage("com.android.chrome")
+                    startActivity(openURL)
+                } catch (e: ActivityNotFoundException) {
+                    // Chrome is probably not installed
+                    // Try with the default browser
+                    openURL.setPackage(null)
+                    startActivity(openURL)
+                }
+            }  else { startActivity(openURL) }
+
 
         }
 
@@ -718,7 +733,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
         if (dCurrentStyle == 1 ) {
             mapStyleOption?.title = getString(mMapStyleSummary[3])
             mapStyleOption?.value = "3"
-            }
+        }
 
         // Do stuff when user clicks on option for map styles
 
@@ -732,7 +747,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
                     if (x == 3) { putInt(getString(R.string.MapStyles), 1) }
                     else        { putInt(getString(R.string.MapStyles), 0) }
                     apply()
-                    }
+                }
 
                 true
             }
@@ -761,7 +776,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
             }
 
 
-        // Update marker pref to show currently selected language
+        // Update exit info to show currently selected language
 
         val dCurrentInfoL = sharedPref.getInt(getString(R.string.langXX), dDefaultMapType)
         val infLangOption: ListPreference? = findPreference("languageTypeList")
@@ -783,6 +798,27 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
                 true
             }
 
+        // Set option for StreetView handler
+
+        val dStreetView = sharedPref.getInt(getString(R.string.openDefault_desc), dDefaultMapType)
+        val streetViewOption: ListPreference? = findPreference("handlerTypeList")
+        streetViewOption?.title = getString(mStreetViewOpen[dStreetView])
+        streetViewOption?.value = "$dStreetView"
+
+        // Do stuff when user clicks on option for marker types
+
+        streetViewOption?.onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _, newValue ->
+                val x: Int = newValue.toString().toInt()
+
+                streetViewOption?.title = getString(mStreetViewOpen[x])
+                with (sharedPref.edit()) {
+                    putInt(getString(R.string.openDefault_desc), x)
+                    apply()
+                }
+
+                true
+            }
 
         // Do stuff when user clicks the Reset All Markers button
 
@@ -800,7 +836,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
                 }
 
                 true
-        }
+            }
 
 
 

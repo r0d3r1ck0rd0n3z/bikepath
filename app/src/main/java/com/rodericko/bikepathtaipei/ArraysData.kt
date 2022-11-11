@@ -31,3 +31,8 @@ val mLanguageTypes = arrayOf(
     R.string.langEN_desc,
     R.string.langZH_desc
 )
+
+val mStreetViewOpen = arrayOf(
+    R.string.openDefault_desc,
+    R.string.openBrowser_desc
+)

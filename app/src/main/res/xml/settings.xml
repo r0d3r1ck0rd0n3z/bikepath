@@ -41,6 +41,14 @@
             app:entryValues="@array/aLanguageOptions_values"
             app:dialogTitle="@string/select_an_option"/>
 
+        <ListPreference
+            app:key="handlerTypeList"
+            app:title="@string/openDefault_desc"
+            app:useSimpleSummaryProvider="true"
+            app:entries="@array/aHandlerOptions"
+            app:entryValues="@array/aHandlerOptions_values"
+            app:dialogTitle="@string/select_an_option"/>
+
     </PreferenceCategory>
 
 

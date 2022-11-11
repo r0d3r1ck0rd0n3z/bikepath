@@ -77,10 +77,14 @@
     <string name="other_02">For tips on using/troubleshooting the app, or if you have questions on how the data was processed, I provide more juicy details here:</string>
     <string name="other_03">Like my work? Support me:  </string>
 
-    <string name="langXX">Info panel language</string>
+    <string name="langXX">Info panel</string>
     <string name="langEN">English</string>
     <string name="langZH">Chinese</string>
     <string name="langEN_desc">Show info in machine-translated English</string>
     <string name="langZH_desc">Use the original Chinese text</string>
+    <string name="openDefault">Default app</string>
+    <string name="openBrowser">Open in browser</string>
+    <string name="openDefault_desc">StreetView in default app (usually gMaps)</string>
+    <string name="openBrowser_desc">StreetView in browser (usually Chrome)</string>
 
 </resources>
