@@ -82,9 +82,9 @@
     <string name="langZH">Chinese</string>
     <string name="langEN_desc">Show info in machine-translated English</string>
     <string name="langZH_desc">Use the original Chinese text</string>
-    <string name="openDefault">Default app</string>
+    <string name="openDefault">Use default app</string>
     <string name="openBrowser">Open in browser</string>
-    <string name="openDefault_desc">StreetView in default app (usually gMaps)</string>
-    <string name="openBrowser_desc">StreetView in browser (usually Chrome)</string>
+    <string name="openDefault_desc">StreetView in default app, usually gMaps</string>
+    <string name="openBrowser_desc">StreetView in browser, usually Chrome</string>
 
 </resources>
