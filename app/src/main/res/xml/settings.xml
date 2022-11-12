@@ -79,17 +79,28 @@
         >
 
         <Preference
+            android:title="@string/bikeLayer"
+            app:key="pBikeLayerLink"
+            app:summary="@string/bikeLayer_desc">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://www.google.com/maps/@?api=1&amp;map_action=map&amp;layer=bicycling" />
+        </Preference>
+
+        <Preference
             android:title="@string/YouBike"
             app:key="pYouBikeLink"
             app:summary="@string/YouBike_desc">
-            <intent android:action="android.intent.action.VIEW"
+            <intent
+                android:action="android.intent.action.VIEW"
                 android:data="https://taipei.youbike.com.tw/station/map?_id=5cc29585083e7b5c1b035552" />
         </Preference>
 
         <Preference
             android:title="@string/feedback_link"
             app:summary="@string/feedback_link_desc">
-            <intent android:action="android.intent.action.VIEW"
+            <intent
+                android:action="android.intent.action.VIEW"
                 android:data="https://r360v.blogspot.com/2022/11/send-me-feedback.html" />
         </Preference>
 

@@ -52,6 +52,8 @@
     <string name="YouBike_desc">Need to find the nearest YouBike station? Click here to visit the YouBike website.</string>
     <string name="custom_markers_desc"><small>To add a custom marker, tap and hold on an empty area of the map. To remove all markers, tap the option above to reset the map. Custom markers are temporary and do not persist between sessions.</small></string>
     <string name="external_links_desc"><small>These are links to external websites and will open in a separate browser window.</small></string>
+    <string name="bikeLayer">Google Maps bike info</string>
+    <string name="bikeLayer_desc">Launch Google Maps with cycling routes highlighted.</string>
 
     <string name="about_01">Additional resources that may be helpful when planning your bike ride.</string>
     <string name="about_02"><big>⛅ </big> Weather forecast</string>
