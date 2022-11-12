@@ -106,11 +106,15 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val coordinate = LatLng(latitude, longitude)
             val yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 19f)
             mMap.animateCamera(yourLocation)
+            oToast( getString(R.string.introOK) )
+        } else {
+            val coordinate = LatLng(25.040859, 121.514375)
+            val yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 10f)
+            mMap.animateCamera(yourLocation)
+            oSnack( getString(R.string.introNO) )
         }
 
-        oToast( getString(R.string.intro) )
     }
-
 
 
     // region ➕ ~~~~~~~ Permissions ~~~~~~~
