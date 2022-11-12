@@ -53,6 +53,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val mREQUESTLOCATIONPERMISSION  = 1
     private lateinit var binding: ActivityMapsBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         installSplashScreen()
@@ -68,47 +69,13 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this,R.color.topbar)))
 
         checkPlayServices()
+
     }
 
 
-    // Do stuff when user presses the back button on the device
-
-    override fun onSupportNavigateUp(): Boolean {
-
-        if (supportFragmentManager.popBackStackImmediate()) {
-            supportFragmentManager.popBackStack()
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
-            setTitle(R.string.exit_question)
-
-            // Handle Reset All Markers command from settings menu
-
-            val sharedPref = getPreferences(MODE_PRIVATE)
-            val dDefaultMarkerState = 0
-            val dCurrentMarkerState = sharedPref.getInt(getString(R.string.reset_markers), dDefaultMarkerState)
-            if (dCurrentMarkerState == 1) {
-                mMap.clear()
-                applyUserSettings()
-            }
-            with (sharedPref.edit()) {
-                putInt(getString(R.string.reset_markers), dDefaultMarkerState)
-                apply()
-            }
-
-            // Handle user customization of map styles from settings menu
-
-            applyUserSettings()
-            return true
-        }
-
-        return super.onSupportNavigateUp()
-    }
-
-
-
-    /**
-     * ~~~~~~~ Do stuff on the map once available. ~~~~~~~
-     */
+    /**  ┌ 
+     *   │ ~~~~~~~ Do stuff on the map once available. ~~~~~~~
+     */ 
 
     @SuppressLint("MissingPermission", "InflateParams")
     override fun onMapReady(googleMap: GoogleMap) {
@@ -117,11 +84,11 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setPoiClick(mMap)
         applyUserSettings()
 
-        /**
-         * ~~~~~~~ Enable location data layer. ~~~~~~~
-         * Get 'last known location' details from LocationManager.
-         * Use that data to zoom to user's last known location.
-         * If no last known location, show the whole map.
+        /** ┌
+         *  │ ~~~~~~~ Enable location data layer. ~~~~~~~
+         *  │ Get 'last known location' details from LocationManager.
+         *  │ Use that data to zoom to user's last known location.
+         *  │ If no last known location, show the whole map.
          */
 
         enableMyLocation()
@@ -141,15 +108,14 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.animateCamera(yourLocation)
         }
 
+        oToast( getString(R.string.intro) )
     }
 
 
 
-
-
     // region ➕ ~~~~~~~ Permissions ~~~~~~~
-    /**
-     * ~~~~~~~ Create a brand new section just to handle permissions. ~~~~~~~
+    /**  ┌ 
+     *   │ ~~~~~~~ Create a brand new section just to handle permissions. ~~~~~~~
      */
 
 
@@ -194,8 +160,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * ~~~~~~~ end of permissions section ~~~~~~~
+    /**  ┌ 
+     *   │  ~~~~~~~ end of permissions section ~~~~~~~
      */
     // endregion permissions x
 
@@ -218,8 +184,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-    /**
-     * INITIALIZE THE OPTIONS MENU.
+    /**  ┌ 
+     *   │ INITIALIZE THE OPTIONS MENU.
      */
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -236,8 +202,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    /**
-     * CONFIGURE BEHAVIOR OF ITEMS IN THE OPTIONS MENU.
+    /**  ┌ 
+     *   │ CONFIGURE BEHAVIOR OF ITEMS IN THE OPTIONS MENU.
      */
     // Called whenever an item in your options menu is selected.
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -281,7 +247,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .setTransition(TRANSIT_FRAGMENT_OPEN)
                 .setReorderingAllowed(true)
                 .addToBackStack("DefaultView")
-                .add(R.id.map, MoreInfoFrag())
+                .add(R.id.map, MoreInformation())
                 .commit()
 
 
@@ -325,14 +291,48 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
+
+    // Do stuff when user presses the back button on the device
+
+    override fun onSupportNavigateUp(): Boolean {
+
+        if (supportFragmentManager.popBackStackImmediate()) {
+            supportFragmentManager.popBackStack()
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_TITLE
+            setTitle(R.string.exit_question)
+
+            // Handle Reset All Markers command from settings menu
+
+            val sharedPref = getPreferences(MODE_PRIVATE)
+            val dDefaultMarkerState = 0
+            val dCurrentMarkerState = sharedPref.getInt(getString(R.string.reset_markers), dDefaultMarkerState)
+            if (dCurrentMarkerState == 1) {
+                mMap.clear()
+                applyUserSettings()
+            }
+            with (sharedPref.edit()) {
+                putInt(getString(R.string.reset_markers), dDefaultMarkerState)
+                apply()
+            }
+
+            // Handle user customization of map styles from settings menu
+
+            applyUserSettings()
+            return true
+        }
+
+        return super.onSupportNavigateUp()
+    }
+
     @Deprecated("Deprecated in Java", ReplaceWith("onSupportNavigateUp()"))
     override fun onBackPressed() {
         onSupportNavigateUp()
     }
 
 
-    /**
-     * CONFIGURE LONG PRESS.
+    /**  ┌ 
+     *   │ CONFIGURE LONG PRESS.
      */
 
     // Called when user makes a long press gesture on the map
@@ -353,12 +353,13 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .snippet(snippet)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
             )
+
         }
     }
 
 
-    /**
-     * ADD MARKER ON MAP WHEN USER CLICKS.
+    /**  ┌ 
+     *   │  ADD MARKER ON MAP WHEN USER CLICKS.
      */
 
     // Places a marker on the map and displays an info window that contains POI name
@@ -702,8 +703,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         snackBar.show()
     }
 
-    /**
-     * ~~~~~~~ Last brace below ~~~~~~~
+    /**  ┌
+     *   │ ~~~~~~~ Last brace below ~~~~~~~
      */
 
 }
@@ -847,9 +848,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 // ~~~~~~~~~~~~~ [MORE INFO] FRAGMENT LOADER ~~~~~~~~~~~~~
 
 
-
-class MoreInfoToolbar : Fragment(R.layout.more_toolbar)
-class MoreInfoFrag : Fragment(R.layout.more_info) {
+class MoreInformation : Fragment(R.layout.more_info) {
 
     private var _binding: MoreInfoBinding? = null
 

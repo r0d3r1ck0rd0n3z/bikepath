@@ -58,7 +58,7 @@ Thank you for installing Taipei Riverside Bike Exits!
 
 # Building the APK
 
-If you want to test the app on your local machine, perform the following:
+If you want to compile the app on your local machine, perform the following:
 
 1. Clone the repository and launch via Android Studio. 
 2. To create a successful build, you'll need to update the <tt>google_maps_api.xml</tt> file with your own Google Maps API key. The SHA1 of the API key must be properly setup in Google Cloud Console. To do this, follow the instructions here: https://developers.google.com/maps/documentation/android-sdk/start#get-key

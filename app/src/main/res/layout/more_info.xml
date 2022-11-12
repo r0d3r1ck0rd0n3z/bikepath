@@ -11,7 +11,7 @@
     android:layout_above="@+id/layout_footer"  >
 
 <LinearLayout
-    tools:context=".MoreInfoFrag"
+    tools:context=".MoreInformation"
     android:theme="@style/MoreInfoTheme"
     android:id="@+id/ll_main_layout"
     android:layout_width="match_parent"

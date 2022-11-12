@@ -89,4 +89,8 @@
     <string name="openDefault_desc">StreetView in default app, usually gMaps</string>
     <string name="openBrowser_desc">StreetView in browser, usually Chrome</string>
 
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="intro">[1] Click the <big>⌖</big> above to find your position \n[2] Zoom out to see more exits</string>
+
 </resources>
