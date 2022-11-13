@@ -2,6 +2,7 @@ package com.rodericko.bikepathtaipei
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -24,6 +25,7 @@ import androidx.browser.customtabs.CustomTabsIntent.COLOR_SCHEME_DARK
 import androidx.browser.customtabs.CustomTabsIntent.COLOR_SCHEME_SYSTEM
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.blue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.Fragment
@@ -101,6 +103,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         if (location != null) {
+            applyUserSettings()
             val latitude = location.latitude
             val longitude = location.longitude
             val coordinate = LatLng(latitude, longitude)
@@ -144,7 +147,28 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
 
-                oSnack(("\ud83d\ude01")+"  Restart app to apply updated permissions")
+
+                val builder = AlertDialog.Builder(this)
+
+                builder.setTitle(("\ud83d\ude01") + "  Restart required")
+                builder.setMessage("Restart app to apply updated permissions. Tap YES to close app, then re-open app to load map again.")
+
+                builder.setPositiveButton("YES") { dialog, which ->
+                    dialog.dismiss()
+                    which.blue
+                    finishAndRemoveTask()
+                }
+
+                builder.setNegativeButton("NO") { dialog, which ->
+                    dialog.dismiss()
+                    which.blue
+                    oToast(("\ud83d\ude01")+"  Restart app to apply updated permissions.")
+                }
+
+                val alert = builder.create()
+                alert.show()
+
+
             }
         }
     }
@@ -176,6 +200,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
+                binding.map.setPadding(100,100,100,50)
                 oSnack("I'm working on a version that doesn't require Google Play Services. Thank you for your patience.")
             } else {
                 oToast("This device is not supported.")
@@ -204,7 +229,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return true
     }
-
 
     /**  ┌ 
      *   │ CONFIGURE BEHAVIOR OF ITEMS IN THE OPTIONS MENU.
@@ -295,7 +319,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
-
     // Do stuff when user presses the back button on the device
 
     override fun onSupportNavigateUp(): Boolean {
@@ -334,7 +357,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         onSupportNavigateUp()
     }
 
-
     /**  ┌ 
      *   │ CONFIGURE LONG PRESS.
      */
@@ -361,7 +383,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     /**  ┌ 
      *   │  ADD MARKER ON MAP WHEN USER CLICKS.
      */
@@ -378,8 +399,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             poiMarker?.showInfoWindow()
         }
     }
-
-
 
     private fun changeMapStyle(x: Int = 0, y: Int = 0, z: Int = 0) {
 
@@ -401,8 +420,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Apply new marker styles (z)
 
         when (sharedPref.getInt(getString(R.string.MarkerType), z)) {
-            0 -> addCirclesOnTheMap()
-            1 -> addMarkersOnTheMap()
+            0 -> addMarkersOnTheMap()
+            1 -> addCirclesOnTheMap()
             2 -> addNumbersOnTheMap()
             else -> {
                 oToast(getString(R.string.not_implemented_yet))
@@ -433,8 +452,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-
-
     private fun addCirclesOnTheMap() {
 
         mMap.clear()
@@ -453,7 +470,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val sharedPref = getPreferences(MODE_PRIVATE)
         with (sharedPref.edit()) {
-            putInt(getString(R.string.MarkerType), 0)
+            putInt(getString(R.string.MarkerType), 1)
             apply()
         }
 
@@ -516,6 +533,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         for (i in 0..length) {
             val mLat  = mLocation_data_en[i][0]
             val mLang = mLocation_data_en[i][1]
+
             createCircleMarks(mLat, mLang, i, 1)
 
             mLat as Double
@@ -538,7 +556,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val sharedPref = getPreferences(MODE_PRIVATE)
         with (sharedPref.edit()) {
-            putInt(getString(R.string.MarkerType), 1)
+            putInt(getString(R.string.MarkerType), 0)
             apply()
         }
 
@@ -587,7 +605,6 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
     }
-
 
     @Suppress("MoveVariableDeclarationIntoWhen")
     @SuppressLint("SetTextI18n")
@@ -657,25 +674,24 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun applyUserSettings() {
 
         val sharedPref = getPreferences(MODE_PRIVATE)
-        val dDefaultMapType = 0
-        val x = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
-        val y = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
-        val z = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
+        val dElseUseDefault = 0
+        val x = sharedPref.getInt(getString(R.string.MapTypes), dElseUseDefault)
+        val y = sharedPref.getInt(getString(R.string.MapStyles), dElseUseDefault)
+        val z = sharedPref.getInt(getString(R.string.MarkerType), dElseUseDefault)
         changeMapStyle( x, y, z )
         when (z) {
-            0 -> addCirclesOnTheMap()
-            1 -> addMarkersOnTheMap()
+            0 -> addMarkersOnTheMap()
+            1 -> addCirclesOnTheMap()
             2 -> addNumbersOnTheMap()
             else -> {
                 oToast(getString(R.string.not_implemented_yet))
-                addCirclesOnTheMap()
+                addMarkersOnTheMap()
             }
         }
 
 
 
     }
-
 
     private fun oToast(text: String) {
         Toast.makeText(applicationContext,text,Toast.LENGTH_LONG).show()
@@ -707,6 +723,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         snackBar.show()
     }
 
+
     /**  ┌
      *   │ ~~~~~~~ Last brace below ~~~~~~~
      */
@@ -726,9 +743,9 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
         // Get current pref values
 
         val sharedPref = activity?.getPreferences(AppCompatActivity.MODE_PRIVATE) ?: return
-        val dDefaultMapType = 0
-        val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dDefaultMapType)
-        val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dDefaultMapType)
+        val dElseUseDefault = 0
+        val dCurrentTypes = sharedPref.getInt(getString(R.string.MapTypes), dElseUseDefault)
+        val dCurrentStyle = sharedPref.getInt(getString(R.string.MapStyles), dElseUseDefault)
 
         // Update map style pref to show current map style values
 
@@ -760,7 +777,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
         // Update marker pref to show currently selected marker types
 
-        val dCurrentMarks = sharedPref.getInt(getString(R.string.MarkerType), dDefaultMapType)
+        val dCurrentMarks = sharedPref.getInt(getString(R.string.MarkerType), dElseUseDefault)
         val markerTypeOption: ListPreference? = findPreference("markerTypeList")
         markerTypeOption?.title = getString(mMapMarkerTypes[dCurrentMarks])
         markerTypeOption?.value = "$dCurrentMarks"
@@ -783,7 +800,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
         // Update exit info to show currently selected language
 
-        val dCurrentInfoL = sharedPref.getInt(getString(R.string.langXX), dDefaultMapType)
+        val dCurrentInfoL = sharedPref.getInt(getString(R.string.langXX), dElseUseDefault)
         val infLangOption: ListPreference? = findPreference("languageTypeList")
         infLangOption?.title = getString(mLanguageTypes[dCurrentInfoL])
         infLangOption?.value = "$dCurrentInfoL"
@@ -805,7 +822,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 
         // Set option for StreetView handler
 
-        val dStreetView = sharedPref.getInt(getString(R.string.openDefault_desc), dDefaultMapType)
+        val dStreetView = sharedPref.getInt(getString(R.string.openDefault_desc), dElseUseDefault)
         val streetViewOption: ListPreference? = findPreference("handlerTypeList")
         streetViewOption?.title = getString(mStreetViewOpen[dStreetView])
         streetViewOption?.value = "$dStreetView"
@@ -849,8 +866,7 @@ class PrefSettingsFragment : PreferenceFragmentCompat() {
 }
 
 
-// ~~~~~~~~~~~~~ [MORE INFO] FRAGMENT LOADER ~~~~~~~~~~~~~
-
+// ~~~~~~~~~~~~~ [MORE INFO] FRAGMENT LOADER ~~~~~~~~~~~~~~
 
 class MoreInformation : Fragment(R.layout.more_info) {
 
@@ -860,14 +876,14 @@ class MoreInformation : Fragment(R.layout.more_info) {
         super.onViewCreated(view, savedInstanceState)
         val binding = MoreInfoBinding.bind(view)
         _binding = binding
-        binding.about04.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/WhatsTheWeather.html") }
-        binding.about07.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapVar1.html" ) }
-        binding.about08.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapVar2.html" ) }
-        binding.about09.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/TwMapVar3.html" ) }
-        binding.about12.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar1.html" ) }
-        binding.about13.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar2.html" ) }
-        binding.about14.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar3.html" ) }
-        binding.about15.setOnClickListener { openURL( "https://r0d3r1ck0rd0n3z.github.io/bikemaps/NTmapVar4.html" ) }
+        binding.about04.setOnClickListener { openURL( "https://bikemaps.vercel.app/WhatsTheWeather.html") }
+        binding.about07.setOnClickListener { openURL( "https://bikemaps.vercel.app/TwMapVar1.html" ) }
+        binding.about08.setOnClickListener { openURL( "https://bikemaps.vercel.app/TwMapVar2.html" ) }
+        binding.about09.setOnClickListener { openURL( "https://bikemaps.vercel.app/TwMapVar3.html" ) }
+        binding.about12.setOnClickListener { openURL( "https://bikemaps.vercel.app/NTmapVar1.html" ) }
+        binding.about13.setOnClickListener { openURL( "https://bikemaps.vercel.app/NTmapVar2.html" ) }
+        binding.about14.setOnClickListener { openURL( "https://bikemaps.vercel.app/NTmapVar3.html" ) }
+        binding.about15.setOnClickListener { openURL( "https://bikemaps.vercel.app/NTmapVar4.html" ) }
         binding.about17.setOnClickListener { openURL( "https://data.gov.tw/dataset/143893" ) }
         binding.about18.setOnClickListener { openURL( "https://r360v.blogspot.com/search/label/trbe" ) }
         binding.about19.setOnClickListener { openURL( "https://ko-fi.com/threesixtydegrees" ) }

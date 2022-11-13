@@ -17,14 +17,14 @@
 
 
     <string-array name="aMarkerStyleOptions">
-        <item>@string/mType_circles</item>
         <item>@string/mType_markers</item>
+        <item>@string/mType_circles</item>
         <item>@string/mType_numbers</item>
     </string-array>
 
     <string-array name="aMarkerStyleOptions_values">
-        <item>0</item> <!-- circles -->
-        <item>1</item> <!-- markers-->
+        <item>0</item> <!-- markers-->
+        <item>1</item> <!-- circles -->
         <item>2</item> <!-- numbers-->
     </string-array>
 

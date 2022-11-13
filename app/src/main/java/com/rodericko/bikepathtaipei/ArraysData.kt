@@ -17,8 +17,8 @@ val mMapStyleSummary = arrayOf(
 )
 
 val mMapMarkerTypes = arrayOf(
-    R.string.mType_circles_desc,
     R.string.mType_markers_desc,
+    R.string.mType_circles_desc,
     R.string.mType_numbers_desc
 )
 

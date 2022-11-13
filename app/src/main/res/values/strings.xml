@@ -91,7 +91,7 @@
 
     <string name="latitude">latitude</string>
     <string name="longitude">longitude</string>
-    <string name="introOK">[1] Click the <big>⌖</big> above to find your position. \n[2] Zoom out to see more exits.</string>
-    <string name="introNO">[1] Location not loaded yet. \n[2] Click the <big>⌖</big> above to find position. \n[3] If no effect, check if GPS is enabled.  </string>
+    <string name="introOK">[1] Tap the <big>⌖</big> above to find your position. \n[2] Zoom out to see more exits.</string>
+    <string name="introNO">[1] Location not loaded yet. \n[2] Tap the <big>⌖</big> above to find position. \n[3] If no effect, check if GPS is enabled.  </string>
 
 </resources>
