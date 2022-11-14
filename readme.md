@@ -29,7 +29,13 @@ Note that this is my first app and is very much a work in progress. I detail all
 
 ## Installing Taipei Riverside Bike Exits
 
-I'll be uploading the most recent builds to the ['*Releases*'](https://github.com/r0d3r1ck0rd0n3z/bikepath/releases) page here. Installation is quite simple:
+You can download the app from the Google Play Store:
+
+* [Taipei Riverside Bike Exits](https://play.google.com/store/apps/details?id=com.rodericko.bikepathtaipei)
+
+<br>
+
+The most recent builds will be uploaded to the ['*Releases*'](https://github.com/r0d3r1ck0rd0n3z/bikepath/releases) page here. Installation is quite simple:
 
 1. Locate and download the most recent APK.
 2. Transfer the APK to your Android device.
